@@ -5,11 +5,14 @@ import store from './store/'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import axios from 'axios'
-
+import http from './api/http'
 Vue.config.productionTip = false;
 Vue.prototype.$axios = axios;
-//axios.defaults.baseURL="/api";
+Vue.use(http)
+
 Vue.use(ElementUI);
+
+sessionStorage.setItem('server','localhost:8000')
 
 new Vue({
 	el: '#app',

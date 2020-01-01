@@ -31,9 +31,7 @@
 	export default {
 	    data(){
 			return {
-				res:{
-					data:0
-				},
+				res:{},
 				loginForm: {
 					username: '',
 					password: '',
@@ -62,28 +60,30 @@
 				params.append('passwd',this.loginForm.password)
 				this.$refs[formName].validate(async (valid) => {
 					if (valid) {
-						let config = {
-							headers : {
-									'Content-Type': 'application/x-www-form-urlencoded',
-									'Access-Control-Allow-Origin': '*',	
-								},
-							};
-								await this.$axios.post(`http://localhost:8000/ppp/`, params )
-								.then(function(response) {
-								const data = response.data;
-								console.log(data)
-							}, function(response) {});
-						this.res.data = 0
-						if (this.res.data == 1) {
+							// await this.$axios.post(`web/login`, params )
+							// .then(function(response) {
+							// const data = response.data;
+							// console.log(data)
+							// }, function(response) {});
+							let req = {
+								type:"post",
+								url:'login/',
+								//post请求写data get请求写params
+								data:params
+							}
+							this.postFN(req).then(r=>{
+								this.res = r;
+							})									
+						if (this.res.status == 1) {
 							this.$message({
 		                        type: 'success',
-		                        message: '登录成功'
+		                        message: this.res.result
 		                    });
 							this.$router.push('manage')
 						}else{
 							this.$message({
 		                        type: 'error',
-		                        message: 'cuowu'
+		                        message: this.res.result
 		                    });
 						}
 					} else {
