@@ -26,14 +26,14 @@
                 const option = {
                     color: colors,
                     title: {
-                        text: '走势图',
+                        text: '走势图123',
                         subtext: ''
                     },
                     tooltip: {
                         trigger: 'axis'
                     },
                     legend: {
-                        data:['新注册用户', '新增订单', '新增管理员']
+                        data:['新注册用户123', '新增订单', '新增管理员']
                     },
                     toolbox: {
                         show: true,

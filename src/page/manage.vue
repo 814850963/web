@@ -6,8 +6,8 @@
 					<el-menu-item index="manage"><i class="el-icon-menu"></i>首页</el-menu-item>
 					<el-submenu index="2">
 						<template slot="title"><i class="el-icon-document"></i>学生管理</template>
-						<el-menu-item index="userList">学生列表</el-menu-item>
-						<el-menu-item index="shopList">面部信息</el-menu-item>
+						<el-menu-item index="studentList">学生列表</el-menu-item>
+						<el-menu-item index="faceInfo">面部信息</el-menu-item>
 						<el-menu-item index="foodList">面部信息</el-menu-item>
 						<el-menu-item index="orderList">订单列表</el-menu-item>
 					</el-submenu>

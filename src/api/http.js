@@ -15,10 +15,25 @@ function requestFN(o) {
     //基础请求方法
     //o.type //请求类型
     //o.url //请求路径
-    var obj = {
-        method: o.type, //请求的类型        
-        url: BaseUrl + o.url //请求地址
+    var a = o.headers
+    if(a!=null)
+    {
+        var obj = {
+            method: o.type, //请求的类型        
+            url: BaseUrl + o.url, //请求地址
+            headers: {
+                'Content-Type': 'multipart/form-data'
+            }
+        }
     }
+    else
+    {
+        var obj = {
+            method: o.type, //请求的类型        
+            url: BaseUrl + o.url, //请求地址
+        }
+    }
+    
     if (o.hasOwnProperty("params")) {
         obj.params = o.params; //url后面带参数 如 https://echarts.baidu.com/examples/a?test="1"
     } else if (o.hasOwnProperty("data")) {

@@ -65,6 +65,7 @@
 							// const data = response.data;
 							// console.log(data)
 							// }, function(response) {});
+							//发送请求
 							let req = {
 								type:"post",
 								url:'login/',
@@ -73,19 +74,21 @@
 							}
 							this.postFN(req).then(r=>{
 								this.res = r;
+								if (this.res.status == 1) {
+								this.$message({
+									type: 'success',
+									message: this.res.result
+								});
+								sessionStorage.setItem("authen",this.res.authen)
+								this.$router.push('manage')
+								}else{
+									this.$message({
+										type: 'error',
+										message: this.res.result
+									});
+								}
 							})									
-						if (this.res.status == 1) {
-							this.$message({
-		                        type: 'success',
-		                        message: this.res.result
-		                    });
-							this.$router.push('manage')
-						}else{
-							this.$message({
-		                        type: 'error',
-		                        message: this.res.result
-		                    });
-						}
+						
 					} else {
 						this.$notify.error({
 							title: '错误',
