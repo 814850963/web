@@ -8,20 +8,21 @@
             <!-- 按照状态检索 -->
             <el-cascader   
                 :options="options"
-                @change="handleChange">
+                @change="handleChange"
+                placeholder="请选择专业">
             </el-cascader>
             <!-- 添加学生 -->
-            <el-button type="primary" @click="addstuTableVisible = true">添加用户</el-button>
+            <el-button type="primary" @click="openadduser()">添加用户</el-button>
             <!-- 添加用户弹框 -->
             <el-dialog
-            style="width:1000px; margin-left:20%;"            
+            style="width:1050px; margin-left:20%;"            
             title="添加用户"
             @close="addDialogClose"
             :visible.sync="addstuTableVisible"
             :close-on-click-modal="false"
             >
             <!-- 添加用户的表单 -->
-            <el-form enctype="multipart/form-data" ref="addFormRef" :rules="rulesAddUser" :model="addUser" label-width="120px">
+            <el-form enctype="multipart/form-data" ref="addFormRef" :rules="rulesAddUser" :model="addUser" label-width="130px">
                 <el-form-item prop="username" label="学生姓名">
                     <el-input v-model="addUser.username"></el-input>
                 </el-form-item>
@@ -38,7 +39,8 @@
                     <!-- 按照状态检索 -->
                     <el-cascader   
                         :options="options"
-                        @change="handleaddusermg">
+                        @change="handleaddusermg"                       
+                        placeholder="请选择专业">
                     </el-cascader>
                 </el-form-item>
                 <el-form-item prop="pic" label="请选择学生头像">
@@ -54,12 +56,119 @@
                     </el-upload>
                 </el-form-item>
                 <el-form-item>
-                    <el-button @click="addstuTableVisible = false">取消</el-button>
+                    <el-button @click="clearform()">取消</el-button>
                     <el-button type="primary" @click="onAddUser">确定</el-button>
                 </el-form-item>
             </el-form>
             </el-dialog>
-
+            <!-- 编辑用户弹框 -->
+            <el-dialog
+            style="width:1050px; margin-left:20%;"            
+            title="编辑用户"
+            @close="addDialogClose"
+            :visible.sync="editstuTableVisible"
+            :close-on-click-modal="false"
+            >
+            <!-- 编辑用户的表单 -->
+            <el-form enctype="multipart/form-data" ref="addFormRef" :rules="rulesAddUser" :model="addUser" label-width="130px">
+                <el-form-item prop="username" label="学生姓名">
+                    <el-input v-model="addUser.username"></el-input>
+                </el-form-item>
+                <el-form-item prop="account" label="学生学号">
+                    <el-input v-model="addUser.account"></el-input>
+                </el-form-item>
+                <el-form-item prop="password" label="学生密码">
+                    <el-input v-model="addUser.password"></el-input>
+                </el-form-item>
+                <el-form-item prop="email" label="学生邮箱">
+                    <el-input v-model="addUser.email"></el-input>
+                </el-form-item>
+                 <el-form-item prop="major" label="学生专业/年级">
+                    <!-- 按照状态检索 -->
+                    <el-cascader   
+                        :options="options"
+                        @change="handleaddusermg"
+                         v-model="defaultmajor">
+                    </el-cascader>
+                </el-form-item>
+                <el-form-item prop="pic" label="请选择学生头像">
+                    <el-upload
+                            action=""
+                            class="upload-demo"
+                            ref="upload"
+                            name="file"
+                            :show-file-list="false"
+                            :auto-upload="true"
+                            :http-request="uploadFile">
+                        <el-button slot="trigger" size="small" type="primary">选取文件</el-button>
+                    </el-upload>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="clearform()">取消</el-button>
+                    <el-button type="primary" @click="onChangeUser">确定</el-button>
+                </el-form-item>
+            </el-form>
+            </el-dialog>
+            <!-- 用户详情弹框 -->
+            <el-dialog
+            style="width:1050px; margin-left:20%;"            
+            title="用户信息"
+            @close="addDialogClose"
+            :visible.sync="infostuTableVisible"
+            :close-on-click-modal="false"
+            >
+            <!-- 用户详情的表单 -->
+            <el-form enctype="multipart/form-data" ref="addFormRef" :rules="rulesAddUser" :model="addUser" label-width="130px">
+                <el-form-item prop="username" label="学生姓名">
+                    <el-input :disabled="true" v-model="addUser.username"></el-input>
+                </el-form-item>
+                <el-form-item prop="account" label="学生学号">
+                    <el-input :disabled="true" v-model="addUser.account"></el-input>
+                </el-form-item>
+                <el-form-item prop="password" label="学生密码">
+                    <el-input :disabled="true" v-model="addUser.password"></el-input>
+                </el-form-item>
+                <el-form-item prop="email" label="学生邮箱">
+                    <el-input :disabled="true" v-model="addUser.email"></el-input>
+                </el-form-item>
+                 <el-form-item prop="major" label="学生专业/年级">
+                    <!-- 按照状态检索 -->
+                    <el-cascader 
+                        :disabled="true"  
+                        :options="options"
+                        @change="handleaddusermg"
+                         v-model="defaultmajor">
+                    </el-cascader>
+                </el-form-item>
+                <el-form-item prop="pic" label="学生头像">
+                    <div class="block">                        
+                        <img style="width:50%" :src="addUser.stupic"/>
+                    </div>
+                </el-form-item>
+                <el-form-item>
+                    <el-button @click="infostuTableVisible = false">取消</el-button>
+                    <el-button type="primary" @click="infostuTableVisible = false">确定</el-button>
+                </el-form-item>
+            </el-form>
+            </el-dialog>
+            <!-- 状态修改页 -->
+            <el-dialog
+            style="width:1050px; margin-left:20%;"            
+            title="修改状态"            
+            :visible.sync="statusTableVisible"
+            :close-on-click-modal="false"
+            >
+            <div style="margin-bottom:20px">
+                <el-radio-group  v-model="stustatus">
+                <el-radio-button  label="毕业"></el-radio-button>
+                <el-radio-button  label="在读"></el-radio-button>
+                <el-radio-button  label="留级"></el-radio-button>
+                <el-radio-button  label="处分"></el-radio-button>
+                </el-radio-group>
+            </div> 
+                <el-button @click="statusTableVisible = false">取消</el-button>
+                <el-button type="primary" @click="changeStatus()">确定</el-button>
+            </el-dialog>                    
             <!-- 学生信息表格 -->
            <el-table
                 :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
@@ -80,7 +189,7 @@
                 prop="headpic">
                 <template slot-scope="scope">
                     <img
-                        style="width: 100px; height: 100px"
+                        style="width: 60px; height: 70px"
                         :src="scope.row.headpic"
                         :fit="fit"/>                                        
                 </template>
@@ -89,7 +198,7 @@
                  <!-- 专业 -->
                 <el-table-column
                 label="专业"
-                prop="major">
+                prop="mname">
                 </el-table-column>
                 <!-- 年级 -->
                 <el-table-column
@@ -107,10 +216,10 @@
                 label="状态"
                 prop="status">
                 <template slot-scope="scope">
-                    <el-tag v-if="scope.row.status===0"  type="info">毕业</el-tag>
-                    <el-tag v-if="scope.row.status===1"  type="success">在读</el-tag>
-                    <el-tag v-if="scope.row.status===2"  type="warning">留级</el-tag>
-                    <el-tag v-if="scope.row.status===3"  type="danger">处分</el-tag>
+                    <el-tag v-if="scope.row.status==0"  type="info">毕业</el-tag>
+                    <el-tag v-if="scope.row.status==1"  type="success">在读</el-tag>
+                    <el-tag v-if="scope.row.status==2"  type="warning">留级</el-tag>
+                    <el-tag v-if="scope.row.status==3"  type="danger">处分</el-tag>
                 </template>
                 </el-table-column>
                 <!-- 操作学生对象 -->
@@ -118,13 +227,15 @@
                 label="操作"
                 >
                 <template slot-scope="scope">
-                    <el-button
-                    size="mini"
-                    @click="handleEdit(scope.$index, scope.row)">Edit</el-button>
-                    <el-button
-                    size="mini"
-                    type="danger"
-                    @click="handleDelete(scope.$index, scope.row)">Delete</el-button>
+                    <el-dropdown split-button type="primary" @click="handleEdit( scope.row)">
+                    编辑
+                    <el-dropdown-menu slot="dropdown">
+                        <el-dropdown-item  @click.native="showinfo(scope.row)">查看详情</el-dropdown-item>
+                        <el-dropdown-item  @click.native="facedata( scope.row)">面部数据</el-dropdown-item>
+                        <el-dropdown-item  @click.native="editstatus( scope.row)">修改状态</el-dropdown-item>
+                        <el-dropdown-item  @click.native="editgrade( scope.row)">修改年级</el-dropdown-item>                       
+                    </el-dropdown-menu>
+                    </el-dropdown>
                 </template>
                 </el-table-column>
             </el-table>
@@ -133,7 +244,7 @@
                   @size-change="handleSizeChange"
                   @current-change="handleCurrentChange"
                   :current-page="currentPage"
-                  :page-size="20"
+                  :page-size="10"
                   layout="total, prev, pager, next"
                   :total="count">
                 </el-pagination>
@@ -147,23 +258,35 @@
     export default {
         data(){
             return {
-                tableData: [                    
-                ],
+                //学生的状态
+                stustatus:'',                             
+                tableData: [],
+                sid: 0,
                 search: '',
                 currentPage: 0,
                 count:0,
                 options: [],
+                //默认的选项
+                defaultmajor:[],
                 //图片的显示格式
                 fit:"fill",
+                //添加用户
                 addstuTableVisible:false,
+                //修改用户
+                editstuTableVisible:false,
+                //用户信息
+                infostuTableVisible:false,
+                //修改状态
+                statusTableVisible:false,
+                //添加用户时的专业年级
+                grade:'',
+                major:'',
                 // 添加用户
                 addUser: {
                     username: '',
                     password: '',
                     email: '',
-                    account: '',
-                    grade:'',
-                    major:'',
+                    account: '',                   
                     pic:'',
                     stupic:'',
                 },
@@ -186,7 +309,15 @@
                     account: [
                     { required: true, message: '请输入学号', trigger: 'blur' },
                     { trigger: 'blur' }
-                    ]
+                    ],
+                     pic:[
+                    { required: true, message: '', trigger: 'blur' },
+                    { trigger: 'blur' }
+                    ],
+                    stupic:[
+                    { required: true, message: '', trigger: 'blur' },
+                    { trigger: 'blur' }
+                    ],
                 }
 
             }
@@ -201,8 +332,12 @@
         },
         methods: {
             //处理按照专业检索的请求
-            handleChange(value) {                
-            const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
+            handleChange(value) {
+            if(value[0]==0)
+                this.getStudentList(); 
+            else
+            {
+                const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('major',value[0])
                 params.append('grade',value[1])				
                 let req = {
@@ -226,16 +361,64 @@
                         });
                     }
                 })	
+            }           
             },
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
             },
+            //当页面发生改变时
             handleCurrentChange(val) {
                 this.currentPage = val;
-                this.offset = (val - 1)*this.limit;
+                const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
+				params.append('page',val)				
+                let req = {
+                    type:"get",
+                    url:'userlist/',
+                    //post请求写data get请求写params
+                     params:params
+                }
+                this.getFN(req).then(r=>{
+                    this.tableData = r.data;                                
+                    this.count = r.len;
+                    if (r.status == 1) {
+                    this.$message({
+                        type: 'success',
+                        message: "获取学生列表信息"
+                    });
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: "获取学生列表信息失败"
+                        });
+                    }
+                })		
             },
-             handleEdit(index, row) {
-                console.log(index, row);
+            //处理编辑的按钮
+             handleEdit(val,flag) {   
+                this.addUser.username = val.name
+                this.addUser.account = val.account
+                this.addUser.password = val.password
+                this.addUser.email = val.email
+                this.addUser.stupic = val.headpic      
+                if(!flag)       
+                this.editstuTableVisible = true
+                this.sid = val.sid
+                this.defaultmajor.push(val.major)
+                switch(val.grade){
+                    case 1:
+                        this.defaultmajor.push('1')
+                        break;
+                    case 2:
+                        this.defaultmajor.push('2')
+                        break;
+                    case 3:
+                        this.defaultmajor.push('3')
+                        break;
+                    case 4:
+                        this.defaultmajor.push('4')                                                                                                
+                        break;
+                }
+                
             },
             handleDelete(index, row) {
                 console.log(index, row);
@@ -251,9 +434,9 @@
                      params:params
                 }
                 this.getFN(req).then(r=>{
-                    this.tableData = r.data;  
-                    console.log(r.data)              
+                    this.tableData = r.data;                           
                     this.count = r.len;
+                    console.log(r.data)
                     if (r.status == 1) {
                     this.$message({
                         type: 'success',
@@ -275,8 +458,7 @@
                     //post请求写data get请求写params
                     //  params:params
                 }
-                this.getFN(req).then(r=>{
-                    console.log(r)
+                this.getFN(req).then(r=>{                    
                     this.options = r;
                     if (r != null) {
                     this.$message({
@@ -303,10 +485,11 @@
 				params.append('name',this.addUser.username)		
 				params.append('password',this.addUser.password)		
 				params.append('account',this.addUser.account)		
-				params.append('major',this.addUser.major)		
-				params.append('grade',this.addUser.grade)		
-				params.append('pic',this.addUser.pic)		
-				params.append('file',this.addUser.stupic)		
+				params.append('major',this.major)		
+                params.append('grade',this.grade)		
+                params.append('email',this.addUser.email)
+                params.append('file',this.addUser.stupic)		
+                params.append('pic',this.addUser.pic)		
                 let req = {
                     type:"post",
                     url:'userlist/addstudent/',
@@ -326,34 +509,161 @@
                         });
                     }
                 })
-    //             let config = {  
-
-    //             // 配置请求头
-
-    //                 headers: {'Content-Type': 'multipart/form-data'}
-
-    //             }
-    //             this.$axios.post('http://localhost:8000/web/userlist/addstudent/',params,{
-    //                         'Content-Type':'multipart/form-data'
-    //                     }).then(res=>{
-            
-    //                     })
-                           
                 this.addstuTableVisible = false  // 关闭弹框
                 this.$refs.addFormRef.resetFields() // 清空表单
+                this.resetFields()
                 this.getStudentList() // 重新调用，刷新表单
             })
          },
+         //修改用户
+         onChangeUser(){        
+                this.$refs.addFormRef.validate(async valid => {
+                console.log(this.major)
+                if (!valid) return null  // 如果验证失败就不往下继续执行
+                const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
+				params.append('name',this.addUser.username)		
+				params.append('password',this.addUser.password)		
+				params.append('account',this.addUser.account)		
+				params.append('major',this.major)		
+                params.append('grade',this.grade)		
+                params.append('email',this.addUser.email)
+                params.append('file',this.addUser.stupic)		
+                params.append('pic',this.addUser.pic)
+                params.append('sid',this.sid)		
+                let req = {
+                    type:"post",
+                    url:'userlist/changestudent/',
+                    //post请求写data get请求写params
+                    data:params,
+                }
+                this.postFN(req).then(r=>{                
+                    if (r.status != 0) {                    
+                    this.$message({
+                        type: 'success',
+                        message: r.result
+                    });
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: r.result
+                        });
+                    }
+                })
+                this.editstuTableVisible = false  // 关闭弹框
+                this.$refs.addFormRef.resetFields() // 清空表单
+                this.resetFields()
+                this.getStudentList() // 重新调用，刷新表单
+            })
+         },
+         //修改用户状态
+         changeStatus(){
+            switch (this.stustatus)
+            {
+                case '毕业':
+                    this.stustatus = 0
+                    break;
+                case '在读':
+                    this.stustatus = 1
+                    break;
+                case '留级':
+                    this.stustatus = 2
+                    break;
+                case '处分':
+                    this.stustatus = 3
+                    break;
+            }
+                const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
+				params.append('status',this.stustatus)		
+                params.append('sid',this.sid)		
+                let req = {
+                    type:"post",
+                    url:'userlist/changestatus/',
+                    //post请求写data get请求写params
+                    data:params,
+                }
+                this.postFN(req).then(r=>{                
+                    if (r.status != 0) {                    
+                    this.$message({
+                        type: 'success',
+                        message: r.result
+                    });
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: r.result
+                        });
+                    }
+                })
+                this.statusTableVisible = false  // 关闭弹框                
+                this.getStudentList() // 重新调用，刷新表单
+         },
+         //点击取消的时候清理表格
+         clearform(){
+            this.editstuTableVisible = false
+            this.infostuTableVisible = false
+            this.addstuTableVisible = false
+            this.resetFields()
+            console.log(this.addUser)
+         },
+         //处理添加用户点击事件
+         openadduser(){
+            this.addstuTableVisible = true
+            this.$refs.addFormRef.resetFields() // 清空表单
+            this.resetFields()
+         },        
+         //重置表格
+         resetFields(){
+             this.$refs.addFormRef.resetFields() // 清空表单
+             this.addUser.username = null
+             this.addUser.account = null
+             this.addUser.password = null
+             this.addUser.file = null
+             this.addUser.email = null
+             this.defaultmajor = []
+         },
          //处理添加学生的选择专业和年级
-         handleaddusermg(value){
-            this.addUser.major = value[0]
-            this.addUser.grade = value[1]
+         handleaddusermg(value){           
+            this.major = value[0]
+            this.grade = value[1]
          },
          //处理上传图片
          uploadFile(param) {                
                 this.addUser.pic = param.file.name
                 this.addUser.stupic = param.file                                
+        },
+        //查看学生详情
+        showinfo(value){
+            this.handleEdit(value,1)
+            this.infostuTableVisible = true
+        },
+        //查看面部数据
+        facedata(value){
+
+        },
+        //修改状态
+        editstatus(value){
+            this.sid = value.sid
+            switch (value.status)
+            {
+                case 0:
+                    this.stustatus = '毕业'
+                    break;
+                case 1:
+                    this.stustatus = '在读'
+                    break;
+                case 2:
+                    this.stustatus = '留级'
+                    break;
+                case 3:
+                    this.stustatus = '处分'
+                    break;
             }
+            this.statusTableVisible = true      
+        },
+        //修改年级
+        editgrade(value){
+
+        }
         },
     }
 </script>
