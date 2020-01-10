@@ -13,7 +13,7 @@
 					</el-submenu>
 					<el-submenu index="3">
 						<template slot="title"><i class="el-icon-plus"></i>教师管理</template>
-						<el-menu-item index="addShop">教师列表</el-menu-item>
+						<el-menu-item index="teacherList">教师列表</el-menu-item>
 						<el-menu-item index="addGoods">面部信息</el-menu-item>
 					</el-submenu>
 					<el-submenu index="4">
@@ -50,9 +50,23 @@
 <script>
     export default {
 		computed: {
+			data(){
+				return{
+					
+				}
+			},
 			defaultActive: function(){
 				return this.$route.path.replace('/', '');
 			}
+		},
+		mounted(){
+			if(!sessionStorage.getItem("authen"))
+            {
+                this.$router.push('/')
+            }
+		},
+		methods(){
+
 		},
     }
 </script>

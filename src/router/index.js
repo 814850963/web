@@ -6,7 +6,7 @@ Vue.use(Router)
 const login = r => require.ensure([], () => r(require('@/page/login')), 'login');
 const manage = r => require.ensure([], () => r(require('@/page/manage')), 'manage');
 const home = r => require.ensure([], () => r(require('@/page/home')), 'home');
-const addShop = r => require.ensure([], () => r(require('@/page/addShop')), 'addShop');
+const teacherLIst = r => require.ensure([], () => r(require('@/page/teacherLIst')), 'teacherLIst');
 const addGoods = r => require.ensure([], () => r(require('@/page/addGoods')), 'addGoods');
 const studentList = r => require.ensure([], () => r(require('@/page/studentList')), 'studentList');
 const faceInfo = r => require.ensure([], () => r(require('@/page/faceInfo')), 'faceInfo');
@@ -35,9 +35,9 @@ const routes = [
 			component: home,
 			meta: [],
 		},{
-			path: '/addShop',
-			component: addShop,
-			meta: ['添加数据', '添加商铺'],
+			path: '/teacherLIst',
+			component: teacherLIst,
+			meta: ['教师管理', '教师列表'],
 		},{
 			path: '/addGoods',
 			component: addGoods,

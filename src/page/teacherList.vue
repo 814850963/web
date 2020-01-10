@@ -1,9 +1,9 @@
 <template>
-    <div class="fillcontain">
+    <div>
         <head-top></head-top>
-        <div class="table_container">
+		<div class="table_container">
             <!-- 关键字搜索 -->
-           <el-input style="width:180px" name="search" v-model="search" placeholder="输入要搜索学生的信息"></el-input>
+           <el-input style="width:180px" name="search" v-model="search" placeholder="输入要搜索教师的名字"></el-input>
         
             <!-- 按照状态检索 -->
             <el-cascader   
@@ -11,31 +11,31 @@
                 @change="handleChange"
                 placeholder="请选择专业">
             </el-cascader>
-            <!-- 添加学生 -->
-            <el-button type="primary" @click="openadduser()">添加用户</el-button>
+            <!-- 添加教师 -->
+            <el-button type="primary" @click="openadduser()">添加教师</el-button>
             <!-- 添加用户弹框 -->
             <el-dialog
             style="width:1050px; margin-left:20%;"            
-            title="添加用户"
+            title="添加教师"
             @close="addDialogClose"
             :visible.sync="addstuTableVisible"
             :close-on-click-modal="false"
             >
             <!-- 添加用户的表单 -->
             <el-form enctype="multipart/form-data" ref="addFormRef" :rules="rulesAddUser" :model="addUser" label-width="130px">
-                <el-form-item prop="username" label="学生姓名">
+                <el-form-item prop="username" label="教师姓名">
                     <el-input v-model="addUser.username"></el-input>
                 </el-form-item>
-                <el-form-item prop="account" label="学生学号">
+                <el-form-item prop="account" label="教师学号">
                     <el-input v-model="addUser.account"></el-input>
                 </el-form-item>
-                <el-form-item prop="password" label="学生密码">
+                <el-form-item prop="password" label="教师密码">
                     <el-input v-model="addUser.password"></el-input>
                 </el-form-item>
-                <el-form-item prop="email" label="学生邮箱">
+                <el-form-item prop="email" label="教师邮箱">
                     <el-input v-model="addUser.email"></el-input>
                 </el-form-item>
-                 <el-form-item prop="major" label="学生专业/年级">
+                 <el-form-item prop="major" label="教师专业">
                     <!-- 按照状态检索 -->
                     <el-cascader   
                         :options="options"
@@ -43,7 +43,7 @@
                         placeholder="请选择专业">
                     </el-cascader>
                 </el-form-item>
-                <el-form-item prop="pic" label="请选择学生头像">
+                <el-form-item prop="pic" label="请选择头像">
                     <el-upload
                             action=""
                             class="upload-demo"
@@ -71,19 +71,19 @@
             >
             <!-- 编辑用户的表单 -->
             <el-form enctype="multipart/form-data" ref="addFormRef" :rules="rulesAddUser" :model="addUser" label-width="130px">
-                <el-form-item prop="username" label="学生姓名">
+                <el-form-item prop="username" label="教师姓名">
                     <el-input v-model="addUser.username"></el-input>
                 </el-form-item>
-                <el-form-item prop="account" label="学生学号">
+                <el-form-item prop="account" label="教师学号">
                     <el-input v-model="addUser.account"></el-input>
                 </el-form-item>
-                <el-form-item prop="password" label="学生密码">
+                <el-form-item prop="password" label="教师密码">
                     <el-input v-model="addUser.password"></el-input>
                 </el-form-item>
-                <el-form-item prop="email" label="学生邮箱">
+                <el-form-item prop="email" label="教师邮箱">
                     <el-input v-model="addUser.email"></el-input>
                 </el-form-item>
-                 <el-form-item prop="major" label="学生专业/年级">
+                 <el-form-item prop="major" label="教师专业">
                     <!-- 按照状态检索 -->
                     <el-cascader   
                         :options="options"
@@ -91,7 +91,7 @@
                          v-model="defaultmajor">
                     </el-cascader>
                 </el-form-item>
-                <el-form-item prop="pic" label="请选择学生头像">
+                <el-form-item prop="pic" label="请选择头像">
                     <el-upload
                             action=""
                             class="upload-demo"
@@ -112,26 +112,26 @@
             <!-- 用户详情弹框 -->
             <el-dialog
             style="width:1050px; margin-left:20%;"            
-            title="用户信息"
+            title="教师信息"
             @close="addDialogClose"
             :visible.sync="infostuTableVisible"
             :close-on-click-modal="false"
             >
             <!-- 用户详情的表单 -->
             <el-form enctype="multipart/form-data" ref="addFormRef" :rules="rulesAddUser" :model="addUser" label-width="130px">
-                <el-form-item prop="username" label="学生姓名">
+                <el-form-item prop="username" label="教师姓名">
                     <el-input :disabled="true" v-model="addUser.username"></el-input>
                 </el-form-item>
-                <el-form-item prop="account" label="学生学号">
+                <el-form-item prop="account" label="教师学号">
                     <el-input :disabled="true" v-model="addUser.account"></el-input>
                 </el-form-item>
-                <el-form-item prop="password" label="学生密码">
+                <el-form-item prop="password" label="教师密码">
                     <el-input :disabled="true" v-model="addUser.password"></el-input>
                 </el-form-item>
-                <el-form-item prop="email" label="学生邮箱">
+                <el-form-item prop="email" label="教师邮箱">
                     <el-input :disabled="true" v-model="addUser.email"></el-input>
                 </el-form-item>
-                 <el-form-item prop="major" label="学生专业/年级">
+                 <el-form-item prop="major" label="教师专业">
                     <!-- 按照状态检索 -->
                     <el-cascader 
                         :disabled="true"  
@@ -140,7 +140,7 @@
                          v-model="defaultmajor">
                     </el-cascader>
                 </el-form-item>
-                <el-form-item prop="pic" label="学生头像">
+                <el-form-item prop="pic" label="教师头像">
                     <div class="block">                        
                         <img style="width:50%" :src="addUser.stupic"/>
                     </div>
@@ -160,27 +160,27 @@
             >
             <div style="margin-bottom:20px">
                 <el-radio-group  v-model="stustatus">
-                <el-radio-button  label="毕业"></el-radio-button>
-                <el-radio-button  label="在读"></el-radio-button>
-                <el-radio-button  label="留级"></el-radio-button>
+                <el-radio-button  label="离职"></el-radio-button>
+                <el-radio-button  label="在岗"></el-radio-button>
+                <el-radio-button  label="请假"></el-radio-button>
                 <el-radio-button  label="处分"></el-radio-button>
                 </el-radio-group>
             </div> 
                 <el-button @click="statusTableVisible = false">取消</el-button>
                 <el-button type="primary" @click="changeStatus()">确定</el-button>
             </el-dialog>                    
-            <!-- 学生信息表格 -->
+            <!-- 教师信息表格 -->
            <el-table
                 :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
                 style="width: 100%">
-                <!-- 学生姓名 -->
+                <!-- 教师姓名 -->
                 <el-table-column
                 label="姓名"
                 prop="name">
                 </el-table-column>
                 <!-- 学号 -->
                 <el-table-column
-                label="学号"
+                label="账号"
                 prop="account">
                 </el-table-column>
                 <!-- 头像 -->
@@ -199,30 +199,19 @@
                 <el-table-column
                 label="专业"
                 prop="mname">
-                </el-table-column>
-                <!-- 年级 -->
-                <el-table-column
-                label="年级"
-                prop="grade">
-                <template slot-scope="scope">
-                    <el-tag v-if="scope.row.grade===1"  type="info">大一</el-tag>
-                    <el-tag v-if="scope.row.grade===2"  type="success">大二</el-tag>
-                    <el-tag v-if="scope.row.grade===3"  type="warning">大三</el-tag>
-                    <el-tag v-if="scope.row.grade===4"  type="danger">大四</el-tag>
-                </template>
-                </el-table-column>
+                </el-table-column>                
                 <!-- 状态 -->
                 <el-table-column
                 label="状态"
                 prop="status">
                 <template slot-scope="scope">
-                    <el-tag v-if="scope.row.status==0"  type="info">毕业</el-tag>
-                    <el-tag v-if="scope.row.status==1"  type="success">在读</el-tag>
-                    <el-tag v-if="scope.row.status==2"  type="warning">留级</el-tag>
-                    <el-tag v-if="scope.row.status==3"  type="danger">处分</el-tag>
+                    <el-tag v-if="scope.row.status==0"  type="info">离职</el-tag>
+                    <el-tag v-if="scope.row.status==1"  type="success">在岗</el-tag>
+                    <el-tag v-if="scope.row.status==2"  type="warning">请假</el-tag>
+                    <el-tag v-if="scope.row.status==3"  type="danger"> 处分</el-tag>
                 </template>
                 </el-table-column>
-                <!-- 操作学生对象 -->
+                <!-- 操作教师对象 -->
                 <el-table-column
                 label="操作"
                 >
@@ -232,7 +221,8 @@
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item  @click.native="showinfo(scope.row)">查看详情</el-dropdown-item>
                         <el-dropdown-item  @click.native="facedata( scope.row)">面部数据</el-dropdown-item>
-                        <el-dropdown-item  @click.native="editstatus( scope.row)">修改状态</el-dropdown-item>                    
+                        <el-dropdown-item  @click.native="editstatus( scope.row)">修改状态</el-dropdown-item>        
+						<el-dropdown-item  @click.native="classinfo( scope.row)">查看班级</el-dropdown-item>                    
                     </el-dropdown-menu>
                     </el-dropdown>
                 </template>
@@ -257,10 +247,10 @@
     export default {
         data(){
             return {
-                //学生的状态
+                //教师的状态
                 stustatus:'',                             
                 tableData: [],
-                sid: 0,
+                tid: 0,
                 search: '',
                 currentPage: 0,
                 count:0,
@@ -277,8 +267,7 @@
                 infostuTableVisible:false,
                 //修改状态
                 statusTableVisible:false,
-                //添加用户时的专业年级
-                grade:'',
+                //添加用户时的专业                
                 major:'',
                 // 添加用户
                 addUser: {
@@ -330,22 +319,21 @@
             {
                 this.$router.push('/')
             }
-            this.getStudentList();
+            this.getTeacherList();
             this.getAllMajor();
         },
         methods: {
             //处理按照专业检索的请求
             handleChange(value) {
             if(value[0]==0)
-                this.getStudentList(); 
+                this.getTeacherList(); 
             else
             {
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
-                params.append('major',value[0])
-                params.append('grade',value[1])				
+                params.append('major',value[0])			
                 let req = {
                     type:"get",
-                    url:'userlist/',
+                    url:'teacherList/',
                     //post请求写data get请求写params
                      params:params
                 }
@@ -355,12 +343,12 @@
                     if (r.status == 1) {
                     this.$message({
                         type: 'success',
-                        message: "获取学生列表信息"
+                        message: "获取教师列表信息"
                     });
                     }else{
                         this.$message({
                             type: 'error',
-                            message: "获取学生列表信息失败"
+                            message: "获取教师列表信息失败"
                         });
                     }
                 })	
@@ -376,7 +364,7 @@
 				params.append('page',val)				
                 let req = {
                     type:"get",
-                    url:'userlist/',
+                    url:'teacherList/',
                     //post请求写data get请求写params
                      params:params
                 }
@@ -386,12 +374,12 @@
                     if (r.status == 1) {
                     this.$message({
                         type: 'success',
-                        message: "获取学生列表信息"
+                        message: "获取教师列表信息"
                     });
                     }else{
                         this.$message({
                             type: 'error',
-                            message: "获取学生列表信息失败"
+                            message: "获取教师列表信息失败"
                         });
                     }
                 })		
@@ -400,67 +388,52 @@
              handleEdit(val,flag) {   
                 this.addUser.username = val.name
                 this.addUser.account = val.account
-                this.addUser.password = val.password
                 this.addUser.email = val.email
                 this.addUser.stupic = val.headpic      
                 if(!flag)       
                 this.editstuTableVisible = true
-                this.sid = val.sid
-                this.defaultmajor.push(val.major)
-                this.major = val.major
-                switch(val.grade){
-                    case 1:
-                        this.defaultmajor.push('1')
-                        break;
-                    case 2:
-                        this.defaultmajor.push('2')
-                        break;
-                    case 3:
-                        this.defaultmajor.push('3')
-                        break;
-                    case 4:
-                        this.defaultmajor.push('4')                                                                                                
-                        break;
-                }
-                
+                this.tid = val.tid
+				this.defaultmajor.push(val.major)     
+				this.major = val.major       
             },
             handleDelete(index, row) {
                 console.log(index, row);
             },
-            //获取学生列表
-            getStudentList(){			
+            //获取教师列表
+            getTeacherList(){			
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
 				params.append('page',1)				
                 let req = {
                     type:"get",
-                    url:'userlist/',
+                    url:'teacherList/',
                     //post请求写data get请求写params
                      params:params
                 }
                 this.getFN(req).then(r=>{
                     this.tableData = r.data;                           
                     this.count = r.len;
-                    console.log(r.data)
                     if (r.status == 1) {
                     this.$message({
                         type: 'success',
-                        message: "获取学生列表信息"
+                        message: "获取教师列表信息"
                     });
                     }else{
                         this.$message({
                             type: 'error',
-                            message: "获取学生列表信息失败"
+                            message: "获取教师列表信息失败"
                         });
                     }
                 })		
             },
             //获取所有专业详情
             getAllMajor(){
+				const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
+				params.append('flag',1)	
                 let req = {
                     type:"get",
-                    url:'userlist/getAllMajor/',
+                    url:'teacherList/getAllMajor/',
                     //post请求写data get请求写params
-                    //  params:params
+                      params:params
                 }
                 this.getFN(req).then(r=>{                    
                     this.options = r;
@@ -479,7 +452,7 @@
             },
              // 关闭弹框的回调
             addDialogClose() {
-            this.$refs.addFormRef.resetFields() // 清空表单
+            //this.$refs.addFormRef.resetFields() // 清空表单
             },
             // 点击添加用户
             onAddUser() {
@@ -489,14 +462,13 @@
 				params.append('name',this.addUser.username)		
 				params.append('password',this.addUser.password)		
 				params.append('account',this.addUser.account)		
-				params.append('major',this.major)		
-                params.append('grade',this.grade)		
+				params.append('major',this.major)		                	
                 params.append('email',this.addUser.email)
                 params.append('file',this.addUser.stupic)		
                 params.append('pic',this.addUser.pic)		
                 let req = {
                     type:"post",
-                    url:'userlist/addstudent/',
+                    url:'teacherList/addteacher/',
                     //post请求写data get请求写params
                     data:params,
                 }
@@ -514,29 +486,27 @@
                     }
                 })
                 this.addstuTableVisible = false  // 关闭弹框
-                this.$refs.addFormRef.resetFields() // 清空表单
+                //this.$refs.addFormRef.resetFields() // 清空表单
                 this.resetFields()
-                this.getStudentList() // 重新调用，刷新表单
+                this.getTeacherList() // 重新调用，刷新表单
             })
          },
          //修改用户
          onChangeUser(){        
                 this.$refs.addFormRef.validate(async valid => {
-                console.log(this.major)
                 if (!valid) return null  // 如果验证失败就不往下继续执行
                 const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
 				params.append('name',this.addUser.username)		
 				params.append('password',this.addUser.password)		
 				params.append('account',this.addUser.account)		
-				params.append('major',this.major)		
-                params.append('grade',this.grade)		
+				params.append('major',this.major)		                	
                 params.append('email',this.addUser.email)
                 params.append('file',this.addUser.stupic)		
                 params.append('pic',this.addUser.pic)
-                params.append('sid',this.sid)		
+				params.append('tid',this.tid)		
                 let req = {
                     type:"post",
-                    url:'userlist/changestudent/',
+                    url:'teacherList/changeteacher/',
                     //post请求写data get请求写params
                     data:params,
                 }
@@ -554,22 +524,22 @@
                     }
                 })
                 this.editstuTableVisible = false  // 关闭弹框
-                this.$refs.addFormRef.resetFields() // 清空表单
+                //this.$refs.addFormRef.resetFields() // 清空表单
                 this.resetFields()
-                this.getStudentList() // 重新调用，刷新表单
+                this.getTeacherList() // 重新调用，刷新表单
             })
          },
          //修改用户状态
          changeStatus(){
             switch (this.stustatus)
             {
-                case '毕业':
+                case '离职':
                     this.stustatus = 0
                     break;
-                case '在读':
+                case '在岗':
                     this.stustatus = 1
                     break;
-                case '留级':
+                case '请假':
                     this.stustatus = 2
                     break;
                 case '处分':
@@ -578,10 +548,10 @@
             }
                 const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
 				params.append('status',this.stustatus)		
-                params.append('sid',this.sid)		
+                params.append('tid',this.tid)		
                 let req = {
                     type:"post",
-                    url:'userlist/changestatus/',
+                    url:'teacherList/changeTstatus/',
                     //post请求写data get请求写params
                     data:params,
                 }
@@ -599,7 +569,7 @@
                     }
                 })
                 this.statusTableVisible = false  // 关闭弹框                
-                this.getStudentList() // 重新调用，刷新表单
+                this.getTeacherList() // 重新调用，刷新表单
          },
          //点击取消的时候清理表格
          clearform(){
@@ -611,12 +581,12 @@
          //处理添加用户点击事件
          openadduser(){
             this.addstuTableVisible = true
-            this.$refs.addFormRef.resetFields() // 清空表单
+            //this.$refs.addFormRef.resetFields() // 清空表单
             this.resetFields()
          },        
          //重置表格
          resetFields(){
-             this.$refs.addFormRef.resetFields() // 清空表单
+             //this.$refs.addFormRef.resetFields() // 清空表单
              this.addUser.username = null
              this.addUser.account = null
              this.addUser.password = null
@@ -624,17 +594,16 @@
              this.addUser.email = null
              this.defaultmajor = []
          },
-         //处理添加学生的选择专业和年级
-         handleaddusermg(value){           
-            this.major = value[0]
-            this.grade = value[1]
+         //处理添加教师的选择专业和年级
+         handleaddusermg(value){  			         
+			this.major = value[0]  		          
          },
          //处理上传图片
          uploadFile(param) {                
                 this.addUser.pic = param.file.name
                 this.addUser.stupic = param.file                                
         },
-        //查看学生详情
+        //查看教师详情
         showinfo(value){
             this.handleEdit(value,1)
             this.infostuTableVisible = true
@@ -645,31 +614,65 @@
         },
         //修改状态
         editstatus(value){
-            this.sid = value.sid
+            this.tid = value.tid
             switch (value.status)
             {
                 case 0:
-                    this.stustatus = '毕业'
+                    this.stustatus = '离职'
                     break;
                 case 1:
-                    this.stustatus = '在读'
+                    this.stustatus = '在岗'
                     break;
                 case 2:
-                    this.stustatus = '留级'
+                    this.stustatus = '请假'
                     break;
                 case 3:
                     this.stustatus = '处分'
                     break;
             }
             this.statusTableVisible = true      
-        },
+		},
+		//获取老师所带班级信息
+		classinfo(){
+
+		},
         },
     }
 </script>
 
 <style lang="less">
 	@import '../style/mixin';
-    .table_container{
-        padding: 20px;
-    }
+	.button_submit{
+		text-align: center;
+	}
+	.avatar-uploader .el-upload {
+	    border: 1px dashed #d9d9d9;
+	    border-radius: 6px;
+	    cursor: pointer;
+	    position: relative;
+	    overflow: hidden;
+	}
+	.avatar-uploader .el-upload:hover {
+	    border-color: #20a0ff;
+	}
+	.avatar-uploader-icon {
+	    font-size: 28px;
+	    color: #8c939d;
+	    width: 120px;
+	    height: 120px;
+	    line-height: 120px;
+	    text-align: center;
+	}
+	.avatar {
+	    width: 120px;
+	    height: 120px;
+	    display: block;
+	}
+	.el-table .info-row {
+	    background: #c9e5f5;
+	}
+
+	.el-table .positive-row {
+	    background: #e2f0e4;
+	}
 </style>
