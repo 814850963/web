@@ -13,8 +13,8 @@ const faceInfo = r => require.ensure([], () => r(require('@/page/faceInfo')), 'f
 const foodList = r => require.ensure([], () => r(require('@/page/foodList')), 'foodList');
 const orderList = r => require.ensure([], () => r(require('@/page/orderList')), 'orderList');
 const adminList = r => require.ensure([], () => r(require('@/page/adminList')), 'adminList');
-const visitor = r => require.ensure([], () => r(require('@/page/visitor')), 'visitor');
-const newMember = r => require.ensure([], () => r(require('@/page/newMember')), 'newMember');
+const courseList = r => require.ensure([], () => r(require('@/page/courseList')), 'courseList');
+const classList = r => require.ensure([], () => r(require('@/page/classList')), 'classList');
 const uploadImg = r => require.ensure([], () => r(require('@/page/uploadImg')), 'uploadImg');
 const vueEdit = r => require.ensure([], () => r(require('@/page/vueEdit')), 'vueEdit');
 const adminSet = r => require.ensure([], () => r(require('@/page/adminSet')), 'adminSet');
@@ -63,13 +63,13 @@ const routes = [
 			component: adminList,
 			meta: ['学生管理 ', '管理员列表'],
 		},{
-			path: '/visitor',
-			component: visitor,
-			meta: ['图表', '用户分布'],
+			path: '/courseList',
+			component: courseList,
+			meta: ['课程管理', '课程列表'],
 		},{
-			path: '/newMember',
-			component: newMember,
-			meta: ['图表', '用户数据'],
+			path: '/classList',
+			component: classList,
+			meta: ['课程管理', '班级列表'],
 		},{
 			path: '/uploadImg',
 			component: uploadImg,
