@@ -9,6 +9,7 @@ const home = r => require.ensure([], () => r(require('@/page/home')), 'home');
 const teacherLIst = r => require.ensure([], () => r(require('@/page/teacherLIst')), 'teacherLIst');
 const addGoods = r => require.ensure([], () => r(require('@/page/addGoods')), 'addGoods');
 const studentList = r => require.ensure([], () => r(require('@/page/studentList')), 'studentList');
+const classstudentList = r => require.ensure([], () => r(require('@/page/classstudentList')), 'classstudentList');
 const faceInfo = r => require.ensure([], () => r(require('@/page/faceInfo')), 'faceInfo');
 const foodList = r => require.ensure([], () => r(require('@/page/foodList')), 'foodList');
 const orderList = r => require.ensure([], () => r(require('@/page/orderList')), 'orderList');
@@ -46,6 +47,10 @@ const routes = [
 			path: '/studentList',
 			component: studentList,
 			meta: ['学生管理 ', '学生列表'],
+		},{
+			path: '/classstudentList',
+			component: classstudentList,
+			meta: ['班级管理 ', '学生列表'],
 		},{
 			path: '/faceInfo',
 			component: faceInfo,

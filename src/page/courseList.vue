@@ -74,36 +74,6 @@
                 </el-form-item>
             </el-form>
             </el-dialog>
-            <!-- 课程详情弹框 -->
-            <el-dialog
-            style="width:1050px; margin-left:20%;"            
-            title="课程信息"
-            @close="addDialogClose"
-            :visible.sync="infostuTableVisible"
-            :close-on-click-modal="false"
-            >
-            <!-- 课程详情的表单 -->
-            <el-form enctype="multipart/form-data" ref="addFormRef" :rules="rulesAddUser" :model="addCourse" label-width="130px">
-               <el-form-item prop="coursename" label="课程名称">
-                    <el-input v-model="addCourse.coursename"></el-input>
-                </el-form-item>
-                <el-form-item prop="info" label="课程简介">
-                    <el-input v-model="addCourse.info"></el-input>
-                </el-form-item>
-                 <el-form-item prop="major" label="专业">
-                    <!-- 按照状态检索 -->
-                    <el-cascader   
-                        :options="options"
-                        @change="handleaddusermg"                       
-                        placeholder="请选择专业">
-                    </el-cascader>
-                </el-form-item>
-                <el-form-item>
-                    <el-button @click="infostuTableVisible = false">取消</el-button>
-                    <el-button type="primary" @click="infostuTableVisible = false">确定</el-button>
-                </el-form-item>
-            </el-form>
-            </el-dialog>
             <!-- 状态修改页 -->
             <el-dialog
             style="width:1050px; margin-left:20%;"            
@@ -204,8 +174,6 @@
                 addstuTableVisible:false,
                 //修改课程
                 editstuTableVisible:false,
-                //课程信息
-                infostuTableVisible:false,
                 //修改状态
                 statusTableVisible:false,
                 //添加课程时的专业年级
@@ -405,7 +373,6 @@
          //修改课程
          onChangeUser(){        
                 this.$refs.addFormRef.validate(async valid => {
-                console.log(this.major)
                 if (!valid) return null  // 如果验证失败就不往下继续执行
                 const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
 				params.append('name',this.addCourse.coursename)		
@@ -481,7 +448,6 @@
          //点击取消的时候清理表格
          clearform(){
             this.editstuTableVisible = false
-            this.infostuTableVisible = false
             this.addstuTableVisible = false
             this.resetFields()
          },
@@ -510,9 +476,10 @@
                 this.addCourse.stupic = param.file                                
 		},
 		//查看课程详情
-        showclass(value){
-            this.handleEdit(value,1)
-            this.infostuTableVisible = true
+        showclass(value){            
+            console.log(value.major)
+             //路由跳转
+            this.$router.push({path:'/classList',query:{courseid:value.courseid,majorid:value.major}})
         },
         //修改状态
         editstatus(value){

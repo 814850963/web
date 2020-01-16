@@ -29,6 +29,33 @@
                 <el-form-item prop="info" label="班级简介">
                     <el-input v-model="addClass.info"></el-input>
                 </el-form-item>
+                <el-form-item prop="place" label="地点">
+                    <el-input v-model="addClass.place"></el-input>
+                </el-form-item>
+                <el-form-item prop="time" label="时间">
+                    <el-input v-model="addClass.time"></el-input>
+                </el-form-item>
+                <el-form-item prop="count" label="节数">
+                    <el-input v-model="addClass.count"></el-input>
+                </el-form-item>
+                <el-form-item prop="teacher" label=任课教师>
+                  <el-select
+                    v-model="value"
+                    :multiple-limit=1
+                    filterable
+                    remote
+                    reserve-keyword
+                    placeholder="请输入教师名称"
+                    :remote-method="remoteMethod"
+                    :loading="loading">
+                    <el-option
+                    v-for="item in teachers"
+                    :key="item.value"
+                    :label="item.label"
+                    :value="item.value">
+                    </el-option>
+                   </el-select>
+                </el-form-item>
                  <el-form-item  label="专业">
                     <!-- 按照状态检索 -->
                     <el-cascader   
@@ -57,8 +84,17 @@
                 <el-form-item prop="classname" label="班级名称">
                     <el-input v-model="addClass.classname"></el-input>
                 </el-form-item>
-                <el-form-item prop="info" label="班级简介">
-                    <el-input v-model="addClass.info"></el-input>
+                <el-form-item prop="tname" label="任课老师">
+                    <el-input v-model="addClass.tname"></el-input>
+                </el-form-item>
+                <el-form-item prop="place" label="地点">
+                    <el-input v-model="addClass.place"></el-input>
+                </el-form-item>
+                <el-form-item prop="time" label="时间">
+                    <el-input v-model="addClass.time"></el-input>
+                </el-form-item>
+                <el-form-item prop="count" label="节数">
+                    <el-input v-model="addClass.count"></el-input>
                 </el-form-item>
                  <el-form-item prop="major" label="专业">
                     <!-- 按照状态检索 -->
@@ -75,36 +111,6 @@
                 </el-form-item>
             </el-form>
             </el-dialog>
-            <!-- 班级详情弹框 -->
-            <el-dialog
-            style="width:1050px; margin-left:20%;"            
-            title="班级信息"
-            @close="addDialogClose"
-            :visible.sync="infoclaTableVisible"
-            :close-on-click-modal="false"
-            >
-            <!-- 班级详情的表单 -->
-            <el-form enctype="multipart/form-data" ref="addFormRef" :rules="rulesAddUser" :model="addClass" label-width="130px">
-               <el-form-item prop="classname" label="班级名称">
-                    <el-input v-model="addClass.classname"></el-input>
-                </el-form-item>
-                <el-form-item prop="info" label="班级简介">
-                    <el-input v-model="addClass.info"></el-input>
-                </el-form-item>
-                 <el-form-item prop="major" label="专业">
-                    <!-- 按照状态检索 -->
-                    <el-cascader   
-                        :options="options"
-                        @change="handleaddusermg"                       
-                        placeholder="请选择专业">
-                    </el-cascader>
-                </el-form-item>
-                <el-form-item>
-                    <el-button @click="infoclaTableVisible = false">取消</el-button>
-                    <el-button type="primary" @click="infoclaTableVisible = false">确定</el-button>
-                </el-form-item>
-            </el-form>
-            </el-dialog>
             <!-- 状态修改页 -->
             <el-dialog
             style="width:1050px; margin-left:20%;"            
@@ -114,10 +120,9 @@
             >
             <div style="margin-bottom:20px">
                 <el-radio-group  v-model="stustatus">
-                <el-radio-button  label="毕业"></el-radio-button>
-                <el-radio-button  label="在读"></el-radio-button>
-                <el-radio-button  label="留级"></el-radio-button>
-                <el-radio-button  label="处分"></el-radio-button>
+                <el-radio-button  label="待开放"></el-radio-button>
+                <el-radio-button  label="正常"></el-radio-button>
+                <el-radio-button  label="禁用"></el-radio-button>                
                 </el-radio-group>
             </div> 
                 <el-button @click="statusTableVisible = false">取消</el-button>
@@ -134,8 +139,8 @@
                 </el-table-column>
                 <!-- 学号 -->
                 <el-table-column
-                label="班级简介"
-                prop="info">
+                label="任课老师"
+                prop="tname">
                 </el-table-column>
                 <!-- 专业 -->
                 <el-table-column
@@ -147,15 +152,29 @@
                 label="所属课程"
                 prop="coursename">                            
                 </el-table-column>
+                <!-- 地点 -->
+                <el-table-column
+                label="地点"
+                prop="place">                            
+                </el-table-column>
+                <!-- 时间 -->
+                <el-table-column
+                label="时间"
+                prop="time">                            
+                </el-table-column>
+                <!-- 节数 -->
+                <el-table-column
+                label="节数"
+                prop="count">                            
+                </el-table-column>
                 <!-- 状态 -->
                 <el-table-column
                 label="状态"
                 prop="status">
                 <template slot-scope="scope">
-                    <el-tag v-if="scope.row.status==0"  type="info">禁用</el-tag>
+                    <el-tag v-if="scope.row.status==0"  type="info">待开放</el-tag>
                     <el-tag v-if="scope.row.status==1"  type="success">正常</el-tag>
-                    <el-tag v-if="scope.row.status==2"  type="warning">留级</el-tag>
-                    <el-tag v-if="scope.row.status==3"  type="danger">处分</el-tag>
+                    <el-tag v-if="scope.row.status==2"  type="warning">禁用</el-tag>                
                 </template>
                 </el-table-column>
                 <!-- 操作班级对象 -->
@@ -167,7 +186,7 @@
                     编辑
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item  @click.native="showstu(scope.row)">查看学生</el-dropdown-item>                        
-                        <el-dropdown-item  @click.native="editstatus( scope.row)">修改状态</el-dropdown-item>                    
+                        <el-dropdown-item  @click.native="editstatus(scope.row)">修改状态</el-dropdown-item>                    
                     </el-dropdown-menu>
                     </el-dropdown>
                 </template>
@@ -194,10 +213,15 @@
     export default {
     	data(){
             return {
+                //所有的老师们
+                teachers:[],
+                value: [],
+                list: [],
+                loading: false,
                 //班级的状态
                 stustatus:'',                             
                 tableData: [],
-                clasid: 0,
+                classid: 0,
                 search: '',
                 currentPage: 0,
                 count:0,
@@ -211,8 +235,6 @@
                 addclaTableVisible:false,
                 //修改班级
                 editclaTableVisible:false,
-                //班级信息
-                infoclaTableVisible:false,
                 //修改状态
                 statusTableVisible:false,
                 //添加班级时的专业年级
@@ -222,7 +244,11 @@
                 // 添加班级
                 addClass: {
                     classname: '',
-                    info: '',                   
+                    info: '',      
+                    place:'',
+                    time:'',
+                    count:'',
+                    tname:'',             
                 },
                 // 验证规则
                 rulesAddUser: {
@@ -239,16 +265,59 @@
     	components: {
     		headTop,
             // visitorPie,
-    	},
+        },
+        activated() {
+            //获取路由传参
+            this.courseid = this.$route.query.courseid
+            this.major = this.$route.query.majorid
+			this.getClassList(this.courseid,this.major);
+            this.getAllMajor();
+        },
     	mounted(){
             if(!sessionStorage.getItem("authen"))
             {
                 this.$router.push('/')
-			}
-			this.getClassList();
-            this.getAllMajor();
+            }            
+            this.getAllTeacher()
         },
     	methods: {
+            //获取所有的老师
+            getAllTeacher(){
+                let req = {
+                    type:"get",
+                    url:'classList/getAllTeacher/',
+                    //post请求写data get请求写params
+                    params:null
+                }
+                this.getFN(req).then(r=>{                    
+                    this.list  = r;
+                    if (r != null) {
+                    this.$message({
+                        type: 'success',
+                        message: "获取专业信息成果"
+                    });
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: "获取专业信息失败"
+                        });
+                    }
+                })	
+            },
+            //处理老师检索信息
+            remoteMethod(query) {                
+                if (query !== '') {
+                this.loading = true;
+                setTimeout(() => {
+                    this.loading = false;
+                    this.teachers = this.list.filter(item => {
+                    return item.label.toLowerCase().indexOf(query.toLowerCase()) > -1;
+                });
+                }, 200);
+                } else {
+                this.teachers = [];
+                }
+            },
             //处理按照专业检索的请求
             handleChange(value) {
             if(value[0]==0)
@@ -288,7 +357,12 @@
             handleCurrentChange(val) {
                 this.currentPage = val;
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
-				params.append('page',val)				
+                params.append('page',val)	
+                if(this.courseid!=null&&this.majorid!=null)
+                {
+                    params.append('course',this.courseid)	
+                    params.append('major',this.majorid)	
+                }			
                 let req = {
                     type:"get",
                     url:'classList/',
@@ -312,7 +386,7 @@
                 })		
             },
             //处理编辑的按钮
-             handleEdit(val,flag) {                    
+             handleEdit(val,flag) {        
                 this.addClass.classname = val.name
                 this.addClass.info = val.info   
                 if(!flag)       
@@ -321,16 +395,27 @@
                 this.defaultmajor.push(val.major)
                 this.major = val.major    
                 this.defaultmajor.push(val.course)
-                this.clasid = val.classid           
+                this.classid = val.classid           
                 this.courseid = val.course 
+                this.addClass.place = val.place
+                this.addClass.time = val.time
+                this.addClass.count = val.count
+                this.addClass.tname = val.tname
             },
             handleDelete(index, row) {
                 console.log(index, row);
             },
             //获取班级列表
-            getClassList(){			
+            getClassList(courseid,majorid){			
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
-				params.append('page',1)				
+                params.append('page',1)	
+                if(courseid!=null&&majorid!=null)
+                {
+                    this.courseid=courseid
+                    this.majorid = majorid
+                    params.append('course',this.courseid)	
+                    params.append('major',this.majorid)	
+                }
                 let req = {
                     type:"get",
                     url:'classList/',
@@ -388,7 +473,12 @@
                 const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
 				params.append('name',this.addClass.classname)			
 				params.append('info',this.addClass.info)		
-				params.append('course',this.courseid)			
+				params.append('place',this.addClass.place)		
+				params.append('time',this.addClass.time)		
+				params.append('count',this.addClass.count)		
+                params.append('course',this.courseid)		
+                params.append('teacherid',this.value)	
+                console.log(this.value)
                 let req = {
                     type:"post",
                     url:'classList/addclass/',
@@ -416,13 +506,16 @@
          //修改班级
          onChangeClass(){        
                 this.$refs.addFormRef.validate(async valid => {
-                console.log(this.major)
+
                 if (!valid) return null  // 如果验证失败就不往下继续执行
                 const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
 				params.append('name',this.addClass.classname)		
-				params.append('info',this.addClass.info)		
+                params.append('info',this.addClass.info)	
+                params.append('place',this.addClass.place)		
+				params.append('time',this.addClass.time)		
+				params.append('count',this.addClass.count)	
 				params.append('course',this.courseid)		
-                params.append('clasid',this.clasid)		
+                params.append('classid',this.classid)		
                 let req = {
                     type:"post",
                     url:'classList/changeclass/',
@@ -451,25 +544,22 @@
          changeStatus(){
             switch (this.stustatus)
             {
-                case '毕业':
+                case '待开放':
                     this.stustatus = 0
                     break;
-                case '在读':
+                case '正常':
                     this.stustatus = 1
                     break;
-                case '留级':
+                case '禁用':
                     this.stustatus = 2
-                    break;
-                case '处分':
-                    this.stustatus = 3
                     break;
             }
                 const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
 				params.append('status',this.stustatus)		
-                params.append('clasid',this.clasid)		
+                params.append('classid',this.classid)		                
                 let req = {
                     type:"post",
-                    url:'classList/changestatus/',
+                    url:'classList/changeCstatus/',
                     //post请求写data get请求写params
                     data:params,
                 }
@@ -492,7 +582,6 @@
          //点击取消的时候清理表格
          clearform(){
             this.editclaTableVisible = false
-            this.infoclaTableVisible = false
             this.addclaTableVisible = false
             this.resetFields()
          },
@@ -508,9 +597,13 @@
              this.addClass.password = null
              this.addClass.file = null
              this.addClass.email = null
+             this.addClass.place = null
+             this.addClass.count = null
+             this.addClass.time = null
              this.defaultmajor = []
              this.major = null
              this.courseid = null
+             this.addClass.tname = null
          },
          //处理添加班级的选择专业和年级
          handleaddusermg(value){           
@@ -524,26 +617,23 @@
 		},
 		//查看班级详情
         showstu(value){
-            this.handleEdit(value,1)
-            this.infoclaTableVisible = true
+            //路由跳转
+            this.$router.push({path:'classstudentList',query:{classid:value.classid,classname:value.name}})
         },
         //修改状态
         editstatus(value){
-            this.clasid = value.clasid
+            this.classid = value.classid            
             switch (value.status)
             {
                 case 0:
-                    this.stustatus = '毕业'
+                    this.stustatus = '待开放'
                     break;
                 case 1:
-                    this.stustatus = '在读'
+                    this.stustatus = '正常'
                     break;
                 case 2:
-                    this.stustatus = '留级'
-                    break;
-                case 3:
-                    this.stustatus = '处分'
-                    break;
+                    this.stustatus = '禁用'
+                    break;                
             }
             this.statusTableVisible = true      
         },
