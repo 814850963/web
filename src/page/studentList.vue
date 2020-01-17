@@ -408,6 +408,7 @@
                 this.sid = val.sid
                 this.defaultmajor.push(val.major)
                 this.major = val.major
+                this.grade = val.grade
                 switch(val.grade){
                     case 1:
                         this.defaultmajor.push('1')
@@ -439,8 +440,7 @@
                 }
                 this.getFN(req).then(r=>{
                     this.tableData = r.data;                           
-                    this.count = r.len;
-                    console.log(r.data)
+                    this.count = r.len;                    
                     if (r.status == 1) {
                     this.$message({
                         type: 'success',
@@ -521,8 +521,7 @@
          },
          //修改用户
          onChangeUser(){        
-                this.$refs.addFormRef.validate(async valid => {
-                console.log(this.major)
+                this.$refs.addFormRef.validate(async valid => {                
                 if (!valid) return null  // 如果验证失败就不往下继续执行
                 const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
 				params.append('name',this.addUser.username)		

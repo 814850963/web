@@ -270,8 +270,7 @@
             //获取路由传参
             this.courseid = this.$route.query.courseid
             this.major = this.$route.query.majorid
-			this.getClassList(this.courseid,this.major);
-            this.getAllMajor();
+			this.getClassList(this.courseid,this.major);            
         },
     	mounted(){
             if(!sessionStorage.getItem("authen"))
@@ -279,6 +278,7 @@
                 this.$router.push('/')
             }            
             this.getAllTeacher()
+            this.getAllMajor();
         },
     	methods: {
             //获取所有的老师
