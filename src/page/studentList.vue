@@ -462,7 +462,8 @@
                     //post请求写data get请求写params
                     //  params:params
                 }
-                this.getFN(req).then(r=>{                    
+                this.getFN(req).then(r=>{               
+                    console.log(r)     
                     this.options = r;
                     if (r != null) {
                     this.$message({

@@ -20,6 +20,7 @@
 						<template slot="title"><i class="el-icon-star-on"></i>课程管理</template>
 						<el-menu-item index="courseList">课程列表</el-menu-item>
 						<el-menu-item index="classList">班级列表</el-menu-item>
+						<el-menu-item index="majorList">专业列表</el-menu-item>
 					</el-submenu>
 					<el-submenu index="5">
 						<template slot="title"><i class="el-icon-edit"></i>通知管理</template>

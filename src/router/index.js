@@ -21,6 +21,7 @@ const vueEdit = r => require.ensure([], () => r(require('@/page/vueEdit')), 'vue
 const adminSet = r => require.ensure([], () => r(require('@/page/adminSet')), 'adminSet');
 const sendMessage = r => require.ensure([], () => r(require('@/page/sendMessage')), 'sendMessage');
 const explain = r => require.ensure([], () => r(require('@/page/explain')), 'explain');
+const majorList = r => require.ensure([],()=> r(require('@/page/majorList')),'majorList');
 
 const routes = [
 	{
@@ -75,6 +76,10 @@ const routes = [
 			path: '/classList',
 			component: classList,
 			meta: ['课程管理', '班级列表'],
+		},{
+			path: '/majorList',
+			component: majorList,
+			meta: ['课程管理', '专业列表'],
 		},{
 			path: '/uploadImg',
 			component: uploadImg,

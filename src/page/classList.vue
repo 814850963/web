@@ -38,6 +38,12 @@
                 <el-form-item prop="count" label="节数">
                     <el-input v-model="addClass.count"></el-input>
                 </el-form-item>
+                <el-form-item prop="weekday" label="平日(如有一周多日的情况请加'/'间隔)">
+                    <el-input v-model="addClass.weekday"></el-input>
+                </el-form-item>
+                <el-form-item prop="total" label="周数(第一周到最后一周请加'/'间隔)">
+                    <el-input v-model="addClass.total"></el-input>
+                </el-form-item>
                 <el-form-item prop="teacher" label=任课教师>
                   <el-select
                     v-model="value"
@@ -95,6 +101,12 @@
                 </el-form-item>
                 <el-form-item prop="count" label="节数">
                     <el-input v-model="addClass.count"></el-input>
+                </el-form-item>
+                <el-form-item prop="weekday" label="平日(如有一周多日的情况请加'/'间隔)">
+                    <el-input v-model="addClass.weekday"></el-input>
+                </el-form-item>
+                <el-form-item prop="total" label="周数(第一周到最后一周请加'/'间隔)">
+                    <el-input v-model="addClass.total"></el-input>
                 </el-form-item>
                  <el-form-item prop="major" label="专业">
                     <!-- 按照状态检索 -->
@@ -162,10 +174,20 @@
                 label="时间"
                 prop="time">                            
                 </el-table-column>
+                <!-- 平日 -->
+                <el-table-column
+                label="平日"
+                prop="weekday">                            
+                </el-table-column>
                 <!-- 节数 -->
                 <el-table-column
                 label="节数"
                 prop="count">                            
+                </el-table-column>
+                <!-- 周数 -->
+                <el-table-column
+                label="周数"
+                prop="total">                            
                 </el-table-column>
                 <!-- 状态 -->
                 <el-table-column
@@ -249,6 +271,8 @@
                     time:'',
                     count:'',
                     tname:'',             
+                    weekday:'',
+                    total:'',
                 },
                 // 验证规则
                 rulesAddUser: {
@@ -257,6 +281,30 @@
                     ],                                    
                     info: [
                     { required: true, message: '请输入简介', trigger: 'blur' },
+                    { trigger: 'blur' }                                        
+                    ],
+                    place: [
+                    { required: true, message: '请输入地点', trigger: 'blur' },
+                    { trigger: 'blur' }                                        
+                    ],
+                    time: [
+                    { required: true, message: '请输入上课时间', trigger: 'blur' },
+                    { trigger: 'blur' }                                        
+                    ],
+                    count: [
+                    { required: true, message: '请输入节数', trigger: 'blur' },
+                    { trigger: 'blur' }                                        
+                    ],
+                    tname: [
+                    { required: true, message: '请输入教师', trigger: 'blur' },
+                    { trigger: 'blur' }                                        
+                    ],
+                    weekday: [
+                    { required: true, message: '请输入上课平日', trigger: 'blur' },
+                    { trigger: 'blur' }                                        
+                    ],
+                    total: [
+                    { required: true, message: '请输入总课时数', trigger: 'blur' },
                     { trigger: 'blur' }                                        
                     ],
                 }
@@ -401,6 +449,8 @@
                 this.addClass.time = val.time
                 this.addClass.count = val.count
                 this.addClass.tname = val.tname
+                this.addClass.weekday = val.weekday
+                this.addClass.total = val.total
             },
             handleDelete(index, row) {
                 console.log(index, row);
@@ -478,7 +528,8 @@
 				params.append('count',this.addClass.count)		
                 params.append('course',this.courseid)		
                 params.append('teacherid',this.value)	
-                console.log(this.value)
+                params.append('total',this.total)	
+                params.append('weekday',this.weekday)	                
                 let req = {
                     type:"post",
                     url:'classList/addclass/',
@@ -515,7 +566,9 @@
 				params.append('time',this.addClass.time)		
 				params.append('count',this.addClass.count)	
 				params.append('course',this.courseid)		
-                params.append('classid',this.classid)		
+                params.append('classid',this.classid)
+                params.append('total',this.total)	
+                params.append('weekday',this.weekday)		
                 let req = {
                     type:"post",
                     url:'classList/changeclass/',
@@ -604,6 +657,8 @@
              this.major = null
              this.courseid = null
              this.addClass.tname = null
+             this.addClass.weekday = null
+             this.addClass.total = null
          },
          //处理添加班级的选择专业和年级
          handleaddusermg(value){           

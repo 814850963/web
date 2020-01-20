@@ -11,6 +11,7 @@ import Vue from 'vue'
 // axios.defaults.withCredentials = true; //让axios携带cookie
 // 创建axios实例
 var BaseUrl="http://localhost:8000/web/";
+//var BaseUrl="http://cd.dryht.cn:25200/web/";
 function requestFN(o) {
     //基础请求方法
     //o.type //请求类型
