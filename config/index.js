@@ -29,7 +29,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
       '/list/*':{ 
-        target: '127.0.0.1:8000',
+        target: '127.0.0.1:8010',
         changeOrigin: true,
         pathRewrite: {
           '^/list': ''
@@ -39,20 +39,20 @@ module.exports = {
 
   },
     context: [ //代理路径
-        '/shopping',
-        '/ugc',
-        '/v1',
-        '/v2',
-        '/v3',
-        '/v4',
-        '/bos',
-        '/member',
-        '/promotion',
-        '/eus',
-        '/payapi',
-        '/admin',
-        '/statis',
-        '/img',
+        // '/shopping',
+        // '/ugc',
+        // '/v1',
+        // '/v2',
+        // '/v3',
+        // '/v4',
+        // '/bos',
+        // '/member',
+        // '/promotion',
+        // '/eus',
+        // '/payapi',
+        // '/admin',
+        // '/statis',
+        // '/img',
     ],
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
