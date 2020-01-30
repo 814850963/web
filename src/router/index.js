@@ -16,12 +16,13 @@ const orderList = r => require.ensure([], () => r(require('@/page/orderList')), 
 const adminList = r => require.ensure([], () => r(require('@/page/adminList')), 'adminList');
 const courseList = r => require.ensure([], () => r(require('@/page/courseList')), 'courseList');
 const classList = r => require.ensure([], () => r(require('@/page/classList')), 'classList');
-const uploadImg = r => require.ensure([], () => r(require('@/page/uploadImg')), 'uploadImg');
+const messageList = r => require.ensure([], () => r(require('@/page/messageList')), 'messageList');
 const vueEdit = r => require.ensure([], () => r(require('@/page/vueEdit')), 'vueEdit');
 const adminSet = r => require.ensure([], () => r(require('@/page/adminSet')), 'adminSet');
 const sendMessage = r => require.ensure([], () => r(require('@/page/sendMessage')), 'sendMessage');
 const explain = r => require.ensure([], () => r(require('@/page/explain')), 'explain');
 const majorList = r => require.ensure([],()=> r(require('@/page/majorList')),'majorList');
+const checkingList = r =>require.ensure([],()=>r(require('@/page/checkingList')),'checkingList');
 
 const routes = [
 	{
@@ -53,6 +54,10 @@ const routes = [
 			component: classstudentList,
 			meta: ['班级管理 ', '学生列表'],
 		},{
+			path: '/checkingList',
+			component: checkingList,
+			meta: ['课程管理', '班级列表', '考勤列表'],
+		},{
 			path: '/faceInfo',
 			component: faceInfo,
 			meta: ['学生管理 ', '面部信息'],
@@ -81,13 +86,13 @@ const routes = [
 			component: majorList,
 			meta: ['课程管理', '专业列表'],
 		},{
-			path: '/uploadImg',
-			component: uploadImg,
-			meta: ['文本编辑', 'MarkDown'],
+			path: '/messageList',
+			component: messageList,
+			meta: ['消息管理', '消息列表'],
 		},{
 			path: '/vueEdit',
 			component: vueEdit,
-			meta: ['编辑', '文本编辑'],
+			meta: ['消息管理', '发送消息'],
 		},{
 			path: '/adminSet',
 			component: adminSet,

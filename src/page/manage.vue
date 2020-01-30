@@ -24,8 +24,8 @@
 					</el-submenu>
 					<el-submenu index="5">
 						<template slot="title"><i class="el-icon-edit"></i>通知管理</template>
-						<el-menu-item index="vueEdit">通知列表</el-menu-item>
-						<el-menu-item index="uploadImg">上传图片</el-menu-item>
+						<el-menu-item index="messageList">消息列表</el-menu-item>
+						<el-menu-item index="vueEdit">发送消息</el-menu-item>
 					</el-submenu>
 					<el-submenu index="6">
 						<template slot="title"><i class="el-icon-setting"></i>考勤管理</template>

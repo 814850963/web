@@ -208,7 +208,8 @@
                     编辑
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item  @click.native="showstu(scope.row)">查看学生</el-dropdown-item>                        
-                        <el-dropdown-item  @click.native="editstatus(scope.row)">修改状态</el-dropdown-item>                    
+                        <el-dropdown-item  @click.native="editstatus(scope.row)">修改状态</el-dropdown-item>
+                        <el-dropdown-item  @click.native="showchecking(scope.row)">查看考勤</el-dropdown-item>
                     </el-dropdown-menu>
                     </el-dropdown>
                 </template>
@@ -235,6 +236,9 @@
     export default {
     	data(){
             return {
+                //搜索状态
+                searchcourse:'',
+                searchmajor:'',
                 //所有的老师们
                 teachers:[],
                 value: [],
@@ -369,9 +373,15 @@
             //处理按照专业检索的请求
             handleChange(value) {
             if(value[0]==0)
+            {
                 this.getClassList(); 
+                this.searchmajor = null
+                this.searchcourse = null
+            }                
             else
             {
+                this.searchmajor = value[0]
+                this.searchcourse = value[1]
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('major',value[0])	
                 params.append('course',value[1])			
@@ -406,11 +416,14 @@
                 this.currentPage = val;
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('page',val)	
-                if(this.courseid!=null&&this.majorid!=null)
+                if(this.searchmajor!=null&&this.searchmajor!='')
                 {
-                    params.append('course',this.courseid)	
-                    params.append('major',this.majorid)	
-                }			
+                    params.append('major',this.searchmajor)	
+                }
+                if(this.searchcourse!=null&&this.searchcourse!='')
+                {
+                    params.append('course',this.searchcourse)
+                }                               				
                 let req = {
                     type:"get",
                     url:'classList/',
@@ -692,6 +705,11 @@
             }
             this.statusTableVisible = true      
         },
+        //查看考勤
+        showchecking(val){            
+            this.$router.push({path:'/checkingList',query:{classid:val.classid}})
+        },
+
 		}
     }
 </script>

@@ -257,6 +257,9 @@
     export default {
         data(){
             return {
+                //搜索时的状态
+                searchmajor:'',
+                searchgrade:'',
                 //学生的状态
                 stustatus:'',                             
                 tableData: [],
@@ -337,9 +340,16 @@
             //处理按照专业检索的请求
             handleChange(value) {
             if(value[0]==0)
-                this.getStudentList(); 
+            {
+                this.getStudentList();
+                this.searchmajor = null
+                this.searchgrade = null
+            }
+                
             else
             {
+                this.searchmajor = value[0]
+                this.searchgrade = value[1]
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('major',value[0])
                 params.append('grade',value[1])				
@@ -373,7 +383,11 @@
             handleCurrentChange(val) {
                 this.currentPage = val;
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
-				params.append('page',val)				
+                params.append('page',val)	
+                if(this.searchmajor!=null&&this.searchmajor!='')
+                    params.append('major',this.searchmajor)                
+                if(this.searchgrade!=null&&this.searchgrade!='')
+                    params.append('grade',this.searchgrade)	
                 let req = {
                     type:"get",
                     url:'userlist/',
@@ -431,7 +445,7 @@
             //获取学生列表
             getStudentList(){			
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
-				params.append('page',1)				
+                params.append('page',1)		                		
                 let req = {
                     type:"get",
                     url:'userlist/',

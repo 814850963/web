@@ -247,6 +247,8 @@
     export default {
         data(){
             return {
+                //搜索状态
+                searchmajor:'',
                 //教师的状态
                 stustatus:'',                             
                 tableData: [],
@@ -325,10 +327,13 @@
         methods: {
             //处理按照专业检索的请求
             handleChange(value) {
-            if(value[0]==0)
+            if(value[0]==0){
                 this.getTeacherList(); 
+                this.searchmajor=null
+            }
             else
             {
+                this.searchmajor = value[0]
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('major',value[0])			
                 let req = {
@@ -361,7 +366,9 @@
             handleCurrentChange(val) {
                 this.currentPage = val;
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
-				params.append('page',val)				
+                params.append('page',val)	
+                if(this.searchmajor!=null&&this.searchmajor!='')
+                params.append('major',this.searchmajor)			
                 let req = {
                     type:"get",
                     url:'teacherList/',

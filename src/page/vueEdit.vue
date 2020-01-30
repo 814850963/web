@@ -2,15 +2,17 @@
     <div>
         <head-top></head-top>
         <div class="edit_container">
-            <p>请选择需要发送信息的班级⬇</p>
+            <p style="margin-left:30%;">请选择需要发送信息的班级⬇</p>
             <!-- 按照状态检索 -->
-            <el-cascader   
+            <el-cascader 
+            style="width:250px;margin-left:30%;"  
                 :options="options"
                 @change="handleChange"
                 placeholder="请选择专业和班级">
             </el-cascader>
-            <el-input v-model="theme" placeholder="请输入主题"></el-input>
+            <el-input style="width:250px;" v-model="theme" placeholder="请输入主题"></el-input>
         	<quill-editor v-model="content"
+                style="width:510px;margin-left:30%;"
                 ref="myQuillEditor"
                 class="editer"
                 :options="editorOption"
@@ -18,7 +20,7 @@
   			</quill-editor>
         </div>
         <div class="submit_btn">
-  			<el-button type="primary" @click="submit">提交</el-button>
+  			<el-button type="primary" style="margin-top:20px;margin-left:0px" @click="submit">提交</el-button>
         </div>
     </div>
 </template>
@@ -30,7 +32,7 @@
     export default {
         data(){
             return {
-                content: '<h3>文本编辑</h3>',
+                content: '',
 			    editorOption: {
 			        
                 },
@@ -56,11 +58,11 @@
 		    onEditorReady(editor) {
 		        console.log('editor ready!', editor)
 		    },
-		    submit(){
-                console.log(this.content);                
+		    submit(){                                
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('content',this.content)	
                 params.append('classid',this.classid)
+                console.log(this.content)
                 if(this.theme == '')
                 this.theme = '无主题'
                 params.append('theme',this.theme)
@@ -71,13 +73,11 @@
                     //post请求写data get请求写params
                         data:params
                 }
-                this.getFN(req).then(r=>{                    
-                    this.tableData = r.data;                
-                    this.count = r.len;
+                this.getFN(req).then(r=>{                                  
                     if (r.status == 1) {
                     this.$message({
                         type: 'success',
-                        message: "获取班级列表信息"
+                        message: "发送消息成功"
                     });
                     }else{
                         this.$message({
@@ -85,6 +85,7 @@
                             message: "获取班级列表信息失败"
                         });
                     }
+                      location.reload()
                 })
             },
             //获取所有专业详情
