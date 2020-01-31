@@ -5,11 +5,21 @@
              <div> {{classname}}   {{time}}   {{place}}   {{weekday}}  {{total}}</div>
             <!-- 关键字搜索 -->
            <el-input style="width:180px" name="search" v-model="search" placeholder="按日期搜索"></el-input>
-            <!-- 添加专业 -->
-            <el-button type="primary" @click="startcheck()">开启考勤</el-button>                
+            <!-- 开启考勤 -->
+            <el-popover
+            placement="top"
+            width="160"
+            v-model="visible">
+            <p>操作不可逆确定吗？</p>
+            <div style="text-align: right; margin: 0">
+                <el-button size="mini" type="text" @click="visible = false">取消</el-button>
+                <el-button type="primary" size="mini" @click="visible = false,startcheck()">确定</el-button>
+            </div>
+            <el-button slot="reference">开启考勤</el-button>
+            </el-popover>          
             <!-- 考勤信息表格 -->
            <el-table
-                :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+                :data="tableData.filter(data => !search || data.time.includes(search))"
                 style="width: 100%">
                 <!-- 考勤日期 -->
                 <el-table-column
@@ -35,7 +45,7 @@
                 label="操作"
                 >
                 <template slot-scope="scope">
-                    <el-dropdown split-button type="primary" @click="handleEdit( scope.row)">
+                    <el-dropdown split-button type="primary" @click="showstudent( scope.row)">
                     查看考勤学生
                     <el-dropdown-menu slot="dropdown">                       
                         <el-dropdown-item  @click.native="editstatus( scope.row)">查看考勤比例图表</el-dropdown-item>                    
@@ -75,7 +85,8 @@
                 time:'',
                 place:'',
                 weekday:'',
-                total:'',                
+                total:'',   
+                visible:'',             
             }
         },
     	components: {
@@ -86,7 +97,8 @@
             //获取路由传参            
             this.classid = this.$route.query.classid
             this.getcheckList()
-            this.getClassInfo()            
+            this.getClassInfo()   
+            console.log(this.time)         
         },
     	mounted(){
             if(!sessionStorage.getItem("authen"))
@@ -126,19 +138,39 @@
                     }
                 })		
             },
-            //处理编辑的按钮
-             handleEdit(val,flag) {   
-                this.addCourse.majorname = val.name
-                this.addCourse.info = val.info   
-                if(!flag)       
-                this.editstuTableVisible = true                           
+            //查看考勤学生
+             showstudent(val,flag) {                             
+                 console.log(val)
+                 this.$router.push({path:'checkStudent',query:{checkid:val.checkid}})
             },
             handleDelete(index, row) {
                 console.log(index, row);
             },
             //开启考勤
             startcheck(){
-
+                const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。                
+                params.append('classid',this.classid)			
+                let req = {
+                    type:"post",
+                    url:'checkList/startCheck/',
+                    //post请求写data get请求写params
+                     data:params
+                }
+                this.getFN(req).then(r=>{
+                    this.tableData = r.data;                           
+                    this.count = r.len;
+                    if (r.status == 1) {
+                    this.$message({
+                        type: 'success',
+                        message: r.result
+                    });
+                    }else{
+                        this.$message({
+                            type: 'error',
+                            message: "失败"
+                        });
+                    }
+                })		
             },
             //获取考勤列表
             getcheckList(){			
@@ -157,12 +189,12 @@
                     if (r.status == 1) {
                     this.$message({
                         type: 'success',
-                        message: "获取考勤列表"
+                        message: r.result
                     });
                     }else{
                         this.$message({
                             type: 'error',
-                            message: "获取考勤列表失败"
+                            message: "失败"
                         });
                     }
                 })		
@@ -198,11 +230,7 @@
          },
          //重置表格
          resetFields(){
-             this.addCourse.majorname = null
-             this.addCourse.info = null
-             this.addCourse.password = null
-             this.addCourse.file = null
-             this.addCourse.email = null
+
          },
     }
 </script>

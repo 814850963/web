@@ -32,6 +32,7 @@
                 <el-form-item prop="place" label="地点">
                     <el-input v-model="addClass.place"></el-input>
                 </el-form-item>
+                1/3/5/7/9对应8:00/9:40/13:20/15:00/18:00
                 <el-form-item prop="time" label="时间">
                     <el-input v-model="addClass.time"></el-input>
                 </el-form-item>
@@ -96,6 +97,7 @@
                 <el-form-item prop="place" label="地点">
                     <el-input v-model="addClass.place"></el-input>
                 </el-form-item>
+                1/3/5/7/9对应8:00/9:40/13:20/15:00/18:00
                 <el-form-item prop="time" label="时间">
                     <el-input v-model="addClass.time"></el-input>
                 </el-form-item>
@@ -172,7 +174,14 @@
                 <!-- 时间 -->
                 <el-table-column
                 label="时间"
-                prop="time">                            
+                prop="time">   
+                <template slot-scope="scope">
+                    <div v-if="scope.row.time==1"  >早上08:00</div>
+                    <div v-if="scope.row.time==3"  >早上09:40</div>
+                    <div v-if="scope.row.time==5"  >下午13:20</div>
+                    <div v-if="scope.row.time==7"  >下午15:00</div>
+                    <div v-if="scope.row.time==9"  >下午18:00</div>
+                </template>                       
                 </el-table-column>
                 <!-- 平日 -->
                 <el-table-column

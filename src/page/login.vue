@@ -17,8 +17,8 @@
 				  	</el-form-item>
 				</el-form>
 				<p class="tip">温馨提示：</p>
-				<p class="tip">未登录过的新用户，自动注册</p>
-				<p class="tip">注册过的用户可凭账号密码登录</p>
+				<p class="tip">能力越大，责任越大</p>
+				<p class="tip">由东软YHT提供技术支持</p>
 	  		</section>
 	  	</transition>
   	</div>

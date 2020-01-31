@@ -23,6 +23,7 @@ const sendMessage = r => require.ensure([], () => r(require('@/page/sendMessage'
 const explain = r => require.ensure([], () => r(require('@/page/explain')), 'explain');
 const majorList = r => require.ensure([],()=> r(require('@/page/majorList')),'majorList');
 const checkingList = r =>require.ensure([],()=>r(require('@/page/checkingList')),'checkingList');
+const checkStudent = r =>require.ensure([],()=>r(require('@/page/checkStudent')),'checkStudent');
 
 const routes = [
 	{
@@ -57,6 +58,10 @@ const routes = [
 			path: '/checkingList',
 			component: checkingList,
 			meta: ['课程管理', '班级列表', '考勤列表'],
+		},{
+			path: '/checkStudent',
+			component: checkStudent,
+			meta: ['课程管理', '班级列表', '考勤列表','考勤学生'],
 		},{
 			path: '/faceInfo',
 			component: faceInfo,
