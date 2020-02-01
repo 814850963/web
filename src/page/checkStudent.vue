@@ -93,14 +93,15 @@
         },
         activated() {
             //获取路由传参            
-            this.checkid = this.$route.query.checkid            
-            this.getStudentChecked()                        
+            this.checkid = this.$route.query.checkid                                              
         },
     	mounted(){
             if(!sessionStorage.getItem("authen"))
             {
                 this.$router.push('/')
-            }        
+            }
+            this.checkid = this.$route.query.checkid
+            this.getStudentChecked()          
         },
     	methods: {
             //获取考勤数据

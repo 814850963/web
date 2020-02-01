@@ -6,15 +6,11 @@
 					<el-menu-item index="manage"><i class="el-icon-menu"></i>首页</el-menu-item>
 					<el-submenu index="2">
 						<template slot="title"><i class="el-icon-document"></i>学生管理</template>
-						<el-menu-item index="studentList">学生列表</el-menu-item>
-						<el-menu-item index="faceInfo">面部信息</el-menu-item>
-						<el-menu-item index="foodList">面部信息</el-menu-item>
-						<el-menu-item index="orderList">订单列表</el-menu-item>
+						<el-menu-item index="studentList">学生列表</el-menu-item>																		
 					</el-submenu>
 					<el-submenu index="3">
 						<template slot="title"><i class="el-icon-plus"></i>教师管理</template>
-						<el-menu-item index="teacherList">教师列表</el-menu-item>
-						<el-menu-item index="addGoods">面部信息</el-menu-item>
+						<el-menu-item index="teacherList">教师列表</el-menu-item>						
 					</el-submenu>
 					<el-submenu index="4">
 						<template slot="title"><i class="el-icon-star-on"></i>课程管理</template>
@@ -29,13 +25,13 @@
 					</el-submenu>
 					<el-submenu index="6">
 						<template slot="title"><i class="el-icon-setting"></i>考勤管理</template>
-						<el-menu-item index="adminSet">查看考勤比例</el-menu-item>
+						<el-menu-item index="checkscale">查看考勤比例</el-menu-item>
 						<!-- <el-menu-item index="sendMessage">发送通知</el-menu-item> -->
 					</el-submenu>
 					<el-submenu index="7">
-						<template slot="title"><i class="el-icon-warning"></i>新闻管理</template>
-						<el-menu-item index="explain">新闻列表</el-menu-item>
-						<el-menu-item index="adminList">新闻种类</el-menu-item>
+						<template slot="title"><i class="el-icon-warning"></i>新闻管理</template>					
+						<el-menu-item index="categoryList">新闻列表</el-menu-item>
+						<el-menu-item index="newsEdit">发布新闻</el-menu-item>
 					</el-submenu>
 				</el-menu>
 			</el-col>
