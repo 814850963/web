@@ -281,8 +281,8 @@
                     classname: '',
                     info: '',      
                     place:'',
-                    time:'',
-                    count:'',
+                    time:0,
+                    count:0,
                     tname:'',             
                     weekday:'',
                     total:'',
@@ -300,14 +300,14 @@
                     { required: true, message: '请输入地点', trigger: 'blur' },
                     { trigger: 'blur' }                                        
                     ],
-                    time: [
-                    { required: true, message: '请输入上课时间', trigger: 'blur' },
-                    { trigger: 'blur' }                                        
-                    ],
-                    count: [
-                    { required: true, message: '请输入节数', trigger: 'blur' },
-                    { trigger: 'blur' }                                        
-                    ],
+                    // time: [
+                    // { required: false, message: '请输入上课时间', trigger: 'blur' },
+                    // { trigger: 'blur' }                                        
+                    // ],
+                    // count: [
+                    // { required: false, message: '请输入节数', trigger: 'blur' },
+                    // { trigger: 'blur' }                                        
+                    // ],
                     tname: [
                     { required: true, message: '请输入教师', trigger: 'blur' },
                     { trigger: 'blur' }                                        
@@ -550,8 +550,8 @@
 				params.append('count',this.addClass.count)		
                 params.append('course',this.courseid)		
                 params.append('teacherid',this.value)	
-                params.append('total',this.total)	
-                params.append('weekday',this.weekday)	                
+                params.append('total',this.addClass.total)	
+                params.append('weekday',this.addClass.weekday)	                
                 let req = {
                     type:"post",
                     url:'classList/addclass/',
@@ -573,7 +573,6 @@
                 })                
                 this.addclaTableVisible = false  // 关闭弹框
                 this.resetFields()
-                this.getClassList() // 重新调用，刷新表单
             })
          },
          //修改班级
@@ -589,8 +588,9 @@
 				params.append('count',this.addClass.count)	
 				params.append('course',this.courseid)		
                 params.append('classid',this.classid)
-                params.append('total',this.total)	
-                params.append('weekday',this.weekday)		
+                params.append('total',this.addClass.total)	
+                params.append('weekday',this.addClass.weekday)		
+                console.log(this.addClass.total,this.addClass.weekday)
                 let req = {
                     type:"post",
                     url:'classList/changeclass/',
@@ -612,7 +612,6 @@
                 })
                 this.editclaTableVisible = false  // 关闭弹框
                 this.resetFields()
-                this.getClassList() // 重新调用，刷新表单
             })
          },
          //修改班级状态
@@ -676,8 +675,6 @@
              this.addClass.count = null
              this.addClass.time = null
              this.defaultmajor = []
-             this.major = null
-             this.courseid = null
              this.addClass.tname = null
              this.addClass.weekday = null
              this.addClass.total = null

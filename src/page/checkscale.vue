@@ -3,6 +3,7 @@
         <head-top></head-top>
         <header class="admin_title">今天的考勤比例</header>
         <template>
+        <h1 v-show="flag" style="text-align:center;margin-top:50px;color:red">今天没有考勤哦</h1>
         <ve-pie :data="chartData" :settings="chartSettings"></ve-pie>
         </template>
     </div>
@@ -19,6 +20,7 @@
                 columns: ['key', 'value'],
                 rows: []
                 },
+                flag:0,
 
             }
         },
@@ -41,9 +43,17 @@
                      params:params
                 }
                 this.getFN(req).then(r=>{
-                    this.tableData = r.data;                           
-                    this.chartData.rows.push({'key':'签到人数','value':r.good})
-                    this.chartData.rows.push({'key':'未签人数','value':r.bad})
+                    this.tableData = r.data;                          
+                    if(r.bad==0&&r.good==0)
+                    {
+                        this.flag = 1
+                    } 
+                    else{
+                        this.chartData.rows.push({'key':'签到人数','value':r.good})
+                        this.chartData.rows.push({'key':'未签人数','value':r.bad}) 
+                        this.flag = 0                       
+                    }
+                    
                     if (r.status == 1) {
                     this.$message({
                         type: 'success',
@@ -66,7 +76,7 @@
     .admin_title{
         text-align: center;
         font-size: 50px;
-        width: 100%;
+        width: 100%;        
         height: auto;
     }
 </style>
