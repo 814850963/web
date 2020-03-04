@@ -16,7 +16,6 @@ const vueEdit = r => require.ensure([], () => r(require('@/page/vueEdit')), 'vue
 const checkscale = r => require.ensure([], () => r(require('@/page/checkscale')), 'checkscale');
 const newsList = r => require.ensure([], () => r(require('@/page/newsList')), 'newsList');
 const categoryList = r => require.ensure([], () => r(require('@/page/categoryList')), 'categoryList');
-const newsEdit = r => require.ensure([], () => r(require('@/page/newsEdit')), 'newsEdit');
 const majorList = r => require.ensure([],()=> r(require('@/page/majorList')),'majorList');
 const checkingList = r =>require.ensure([],()=>r(require('@/page/checkingList')),'checkingList');
 const checkStudent = r =>require.ensure([],()=>r(require('@/page/checkStudent')),'checkStudent');
@@ -78,10 +77,6 @@ const routes = [
 			path: '/checkscale',
 			component: checkscale,
 			meta: ['考勤管理', '考勤列表'],
-		},{
-			path: '/newsEdit',
-			component: newsEdit,
-			meta: ['新闻管理', '发布新闻'],
 		},{
 			path: '/categoryList',
 			component: categoryList,

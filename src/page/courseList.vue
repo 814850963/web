@@ -3,7 +3,7 @@
         <head-top></head-top>
 		 <div class="table_container">
             <!-- 关键字搜索 -->
-           <el-input style="width:180px" name="search" v-model="search" placeholder="输入要搜索课程的信息"></el-input>
+           <el-input style="width:180px" name="search" @keyup.enter.native="getCourseList" v-model="search" placeholder="输入要搜索课程的信息"></el-input>
         
             <!-- 按照状态检索 -->
             <el-cascader   
@@ -94,7 +94,7 @@
             </el-dialog>                    
             <!-- 课程信息表格 -->
            <el-table
-                :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+                :data="tableData"
                 style="width: 100%">
                 <!-- 课程姓名 -->
                 <el-table-column
@@ -222,7 +222,8 @@
             {
                 this.searchmajor = value[0]
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
-                params.append('major',value[0])			
+                params.append('major',value[0])	
+                params.append('search',this.search)	
                 let req = {
                     type:"get",
                     url:'courseList/',
@@ -256,6 +257,7 @@
                 params.append('page',val)		
                 if(this.searchmajor!=null&&this.searchmajor!='')
                     params.append('major',this.searchmajor)		
+                    params.append('search',this.search)	
                 let req = {
                     type:"get",
                     url:'courseList/',
@@ -294,6 +296,7 @@
             //获取课程列表
             getCourseList(){			
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
+                params.append('search',this.search)				
 				params.append('page',1)				
                 let req = {
                     type:"get",
@@ -455,6 +458,7 @@
          },
          //点击取消的时候清理表格
          clearform(){
+            this.$refs.addFormRef.resetFields() // 清空表单
             this.editstuTableVisible = false
             this.addstuTableVisible = false
             this.resetFields()

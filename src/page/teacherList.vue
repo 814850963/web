@@ -3,7 +3,7 @@
         <head-top></head-top>
 		<div class="table_container">
             <!-- 关键字搜索 -->
-           <el-input style="width:180px" name="search" v-model="search" placeholder="输入要搜索教师的名字"></el-input>
+           <el-input style="width:180px"  @keyup.enter.native="getTeacherList" name="search" v-model="search" placeholder="输入要搜索教师的名字"></el-input>
         
             <!-- 按照状态检索 -->
             <el-cascader   
@@ -171,7 +171,7 @@
             </el-dialog>                    
             <!-- 教师信息表格 -->
            <el-table
-                :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+                :data="tableData"
                 style="width: 100%">
                 <!-- 教师姓名 -->
                 <el-table-column
@@ -219,8 +219,7 @@
                     <el-dropdown split-button type="primary" @click="handleEdit( scope.row)">
                     编辑
                     <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item  @click.native="showinfo(scope.row)">查看详情</el-dropdown-item>
-                        <el-dropdown-item  @click.native="facedata( scope.row)">面部数据</el-dropdown-item>
+                        <el-dropdown-item  @click.native="showinfo(scope.row)">查看详情</el-dropdown-item>                        
                         <el-dropdown-item  @click.native="editstatus( scope.row)">修改状态</el-dropdown-item>        
 						<el-dropdown-item  @click.native="classinfo( scope.row)">查看班级</el-dropdown-item>                    
                     </el-dropdown-menu>
@@ -335,7 +334,8 @@
             {
                 this.searchmajor = value[0]
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
-                params.append('major',value[0])			
+                params.append('major',value[0])		
+                params.append('search',this.search)					
                 let req = {
                     type:"get",
                     url:'teacherList/',
@@ -368,7 +368,8 @@
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('page',val)	
                 if(this.searchmajor!=null&&this.searchmajor!='')
-                params.append('major',this.searchmajor)			
+                params.append('major',this.searchmajor)	
+                params.append('search',this.search)						
                 let req = {
                     type:"get",
                     url:'teacherList/',
@@ -409,6 +410,7 @@
             //获取教师列表
             getTeacherList(){			
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
+                params.append('search',this.search)				
 				params.append('page',1)				
                 let req = {
                     type:"get",
@@ -485,6 +487,10 @@
                         type: 'success',
                         message: r.result
                     });
+                    this.addstuTableVisible = false  // 关闭弹框
+                    //this.$refs.addFormRef.resetFields() // 清空表单
+                    this.resetFields()
+                    this.getTeacherList() // 重新调用，刷新表单
                     }else{
                         this.$message({
                             type: 'error',
@@ -492,10 +498,7 @@
                         });
                     }
                 })
-                this.addstuTableVisible = false  // 关闭弹框
-                //this.$refs.addFormRef.resetFields() // 清空表单
-                this.resetFields()
-                this.getTeacherList() // 重新调用，刷新表单
+
             })
          },
          //修改用户
@@ -523,6 +526,10 @@
                         type: 'success',
                         message: r.result
                     });
+                    this.editstuTableVisible = false  // 关闭弹框
+                    //this.$refs.addFormRef.resetFields() // 清空表单
+                    this.resetFields()
+                    this.getTeacherList() // 重新调用，刷新表单
                     }else{
                         this.$message({
                             type: 'error',
@@ -530,10 +537,7 @@
                         });
                     }
                 })
-                this.editstuTableVisible = false  // 关闭弹框
-                //this.$refs.addFormRef.resetFields() // 清空表单
-                this.resetFields()
-                this.getTeacherList() // 重新调用，刷新表单
+
             })
          },
          //修改用户状态
@@ -567,7 +571,10 @@
                     this.$message({
                         type: 'success',
                         message: r.result
+                        
                     });
+                    this.statusTableVisible = false  // 关闭弹框                
+                    this.getTeacherList() // 重新调用，刷新表单
                     }else{
                         this.$message({
                             type: 'error',
@@ -575,8 +582,7 @@
                         });
                     }
                 })
-                this.statusTableVisible = false  // 关闭弹框                
-                this.getTeacherList() // 重新调用，刷新表单
+
          },
          //点击取消的时候清理表格
          clearform(){
@@ -593,31 +599,29 @@
          },        
          //重置表格
          resetFields(){
-             //this.$refs.addFormRef.resetFields() // 清空表单
+             this.$refs.addFormRef.resetFields() // 清空表单
              this.addUser.username = null
              this.addUser.account = null
              this.addUser.password = null
              this.addUser.file = null
              this.addUser.email = null
+            this.addUser.email =null
+            this.addUser.stupic = null      
              this.defaultmajor = []
+          
          },
          //处理添加教师的选择专业和年级
          handleaddusermg(value){  			         
 			this.major = value[0]  		          
          },
          //处理上传图片
-         uploadFile(param) {                
-                this.addUser.pic = param.file.name
+         uploadFile(param) {                this.addUser.pic = param.file.name
                 this.addUser.stupic = param.file                                
         },
         //查看教师详情
         showinfo(value){
             this.handleEdit(value,1)
             this.infostuTableVisible = true
-        },
-        //查看面部数据
-        facedata(value){
-
         },
         //修改状态
         editstatus(value){

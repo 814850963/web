@@ -5,7 +5,7 @@
             <!-- 关键字搜索 -->
            <el-input style="width:180px" name="search" v-model="search" placeholder="输入要搜索新闻的信息"></el-input>
             <!-- 添加新闻 -->
-            <el-button type="primary" @click="openaddcategory()">添加新闻</el-button>
+            <el-button type="primary" @click="openaddcategory()">添加新闻</el-button>            
             <!-- 添加新闻弹框 -->
             <el-dialog
             style="width:1050px; margin-left:20%;"            
@@ -14,15 +14,25 @@
             :visible.sync="addstuTableVisible"
             :close-on-click-modal="false"
             >
-                <el-input style="width:100%;" v-model="theme" placeholder="请输入主题"></el-input>
-                <quill-editor v-model="content"
-                    style="height:auto;"
-                    ref="myQuillEditor"
-                    class="editer"
-                    :options="editorOption"
-                    @ready="onEditorReady($event)">
+            <el-form enctype="multipart/form-data" :model="addNew" label-width="0px">
+                <el-form-item prop="theme" label="">
+                    <el-input style="width:100%;" v-model="theme" placeholder="请输入主题"></el-input>
+                </el-form-item>
+                富文本必须有一张图片作为新闻封面
+                <el-form-item prop="content" label="">
+                    <quill-editor v-model="content"
+                        style="height:auto;"
+                        ref="myQuillEditor"
+                        class="editer"
+                        :options="editorOption"
+                        @ready="onEditorReady($event)">
                 </quill-editor>
-                <el-button type="primary" @click="submit">确定</el-button>
+                </el-form-item>                
+                <el-form-item>
+                    <el-button @click="clearform()">取消</el-button>
+                    <el-button type="primary" @click="submit">确定</el-button>
+                </el-form-item>
+            </el-form>
             </el-dialog>
             <!-- 编辑新闻弹框 -->
             <el-dialog
@@ -76,6 +86,18 @@
                 label="创建时间"
                 prop="time">
                 </el-table-column>
+                <!-- 封面图 -->
+                <el-table-column
+                label="封面图"
+                prop="pic">
+                <template slot-scope="scope">
+                    <img
+                        style="width: 60px; height: 70px"
+                        :src="scope.row.pic"
+                        :fit="fit"/>                                        
+                </template>
+                
+                </el-table-column>
                 <!-- 状态 -->
                 <el-table-column
                 label="状态"
@@ -120,12 +142,19 @@
                 categoryid: 0,
                 editorOption: {			        
                 },
+                // 添加用户
+                addNew: {                    
+                    filename: '',
+                    file: '',                                                   
+                },
                 search: '',
                 currentPage: 0,
                 count:0,
                 options: [],
                 theme:'',       
                 newid:'',
+                pic:null,
+                filename:null,
                 content:'',
                 //默认的选项
                 defaultmajor:[],
@@ -182,6 +211,12 @@
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
             },
+            //处理上传图片
+            uploadFile(param) {                
+                console.log(param)
+                this.addNew.file = param.file             
+                this.addNew.filename = param.file.name   
+            },
             //处理编辑的按钮
              handleEdit(val,flag) {   
                 this.addcategory.categoryname = val.name
@@ -209,12 +244,12 @@
                     if (r.status == 1) {
                     this.$message({
                         type: 'success',
-                        message: "获取新闻列表信息"
+                        message: r.result
                     });
                     }else{
                         this.$message({
                             type: 'error',
-                            message: "获取新闻列表信息失败"
+                            message: r.result
                         });
                     }
                 })		
@@ -275,20 +310,16 @@
          },        
          //重置表格
          resetFields(){
-             this.addcategory.categoryname = null
-             this.addcategory.info = null
-             this.addcategory.password = null
-             this.addcategory.file = null
-             this.addcategory.email = null
-             this.defaultmajor = []
+             this.content = null
+             this.theme = null        
          },
         onEditorReady(editor) {
 		        console.log('editor ready!', editor)
 		    },
-		submit(){                                
+		submit(){                                     
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('content',this.content)	
-                params.append('cid',this.categoryid)                
+                params.append('cid',this.categoryid)       
                 if(this.theme == '')
                 this.theme = '无主题'
                 params.append('theme',this.theme)                
@@ -307,11 +338,14 @@
                     }else{
                         this.$message({
                             type: 'error',
-                            message: "获取班级列表信息失败"
+                            message: r.result
                         });
                     }
-                      location.reload()
+                    this.resetFields()
+                    location.reload()
                 })
+                
+               
             },
         //修改内容
         changenew(){
@@ -334,12 +368,12 @@
                         this.content = ''
                     this.$message({
                         type: 'success',
-                        message: "发送消息成功"
+                        message: r.result
                     });
                     }else{
                         this.$message({
                             type: 'error',
-                            message: "获取班级列表信息失败"
+                            message: r.result
                         });
                     }
                       location.reload()

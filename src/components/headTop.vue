@@ -26,7 +26,11 @@
     		}
     	},
     	created(){
-    	},
+			
+		},
+		mounted(){
+			console.log(this.$route.meta)
+		},
     	computed: {
     	},
 		methods: {

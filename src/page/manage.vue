@@ -30,8 +30,7 @@
 					</el-submenu>
 					<el-submenu index="7">
 						<template slot="title"><i class="el-icon-warning"></i>新闻管理</template>					
-						<el-menu-item index="categoryList">新闻列表</el-menu-item>
-						<el-menu-item index="newsEdit">发布新闻</el-menu-item>
+						<el-menu-item index="categoryList">新闻列表</el-menu-item>						
 					</el-submenu>
 				</el-menu>
 			</el-col>
