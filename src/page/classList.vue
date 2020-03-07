@@ -3,11 +3,12 @@
         <head-top></head-top>
 		 <div class="table_container">
             <!-- 关键字搜索 -->
-           <el-input style="width:180px" name="search" v-model="search" placeholder="输入要搜索班级的信息"></el-input>
+           <el-input style="width:180px" @keyup.enter.native="getClassList"  name="search" v-model="search" placeholder="输入要搜索班级的信息"></el-input>
         
             <!-- 按照状态检索 -->
             <el-cascader   
                 :options="options"
+                :value="cascade"
                 @change="handleChange"
                 placeholder="请选择专业和班级">
             </el-cascader>
@@ -33,11 +34,11 @@
                     <el-input v-model="addClass.place"></el-input>
                 </el-form-item>
                 1/3/5/7/9对应8:00/9:40/13:20/15:00/18:00
-                <el-form-item prop="time" label="时间">
-                    <el-input v-model="addClass.time"></el-input>
+                <el-form-item prop="classtime" label="时间">
+                    <el-input v-model="addClass.classtime"></el-input>
                 </el-form-item>
-                <el-form-item prop="count" label="节数">
-                    <el-input v-model="addClass.count"></el-input>
+                <el-form-item prop="classcount" label="节数">
+                    <el-input v-model="addClass.classcount"></el-input>
                 </el-form-item>
                 <el-form-item prop="weekday" label="平日(如有一周多日的情况请加'/'间隔)">
                     <el-input v-model="addClass.weekday"></el-input>
@@ -45,9 +46,9 @@
                 <el-form-item prop="total" label="周数(第一周到最后一周请加'/'间隔)">
                     <el-input v-model="addClass.total"></el-input>
                 </el-form-item>
-                <el-form-item prop="teacher" label=任课教师>
+                <el-form-item prop="value" label=任课教师>
                   <el-select
-                    v-model="value"
+                    v-model="addClass.teacher"
                     :multiple-limit=1
                     filterable
                     remote
@@ -63,13 +64,14 @@
                     </el-option>
                    </el-select>
                 </el-form-item>
-                 <el-form-item  label="专业">
+                 <el-form-item  prop="cascad"  label="专业">
                     <!-- 按照状态检索 -->
                     <el-cascader   
                         :options="options"
+                        value="cascad"
+                        v-model="addClass.cascad"
                         @change="handleaddusermg"                       
-                        placeholder="请选择专业"
-                        v-model="blankmajor">
+                        placeholder="请选择专业">
                     </el-cascader>
                 </el-form-item>
                 <el-form-item>
@@ -91,18 +93,15 @@
                 <el-form-item prop="classname" label="班级名称">
                     <el-input v-model="addClass.classname"></el-input>
                 </el-form-item>
-                <el-form-item prop="tname" label="任课老师">
-                    <el-input v-model="addClass.tname"></el-input>
-                </el-form-item>
                 <el-form-item prop="place" label="地点">
                     <el-input v-model="addClass.place"></el-input>
                 </el-form-item>
                 1/3/5/7/9对应8:00/9:40/13:20/15:00/18:00
-                <el-form-item prop="time" label="时间">
-                    <el-input v-model="addClass.time"></el-input>
+                <el-form-item prop="classtime" label="时间">
+                    <el-input v-model="addClass.classtime"></el-input>
                 </el-form-item>
-                <el-form-item prop="count" label="节数">
-                    <el-input v-model="addClass.count"></el-input>
+                <el-form-item prop="classcount" label="节数">
+                    <el-input v-model="addClass.classcount"></el-input>
                 </el-form-item>
                 <el-form-item prop="weekday" label="平日(如有一周多日的情况请加'/'间隔)">
                     <el-input v-model="addClass.weekday"></el-input>
@@ -144,7 +143,7 @@
             </el-dialog>                    
             <!-- 班级信息表格 -->
            <el-table
-                :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+                :data="tableData"
                 style="width: 100%">
                 <!-- 班级姓名 -->
                 <el-table-column
@@ -176,11 +175,11 @@
                 label="时间"
                 prop="time">   
                 <template slot-scope="scope">
-                    <div v-if="scope.row.time==1"  >早上08:00</div>
-                    <div v-if="scope.row.time==3"  >早上09:40</div>
-                    <div v-if="scope.row.time==5"  >下午13:20</div>
-                    <div v-if="scope.row.time==7"  >下午15:00</div>
-                    <div v-if="scope.row.time==9"  >下午18:00</div>
+                    <div v-if="scope.row.time==1"  >08:00</div>
+                    <div v-if="scope.row.time==3"  >09:40</div>
+                    <div v-if="scope.row.time==5"  >13:20</div>
+                    <div v-if="scope.row.time==7"  >15:00</div>
+                    <div v-if="scope.row.time==9"  >18:00</div>
                 </template>                       
                 </el-table-column>
                 <!-- 平日 -->
@@ -245,6 +244,8 @@
     export default {
     	data(){
             return {
+                cascade:[],
+                cascad:[],
                 //搜索状态
                 searchcourse:'',
                 searchmajor:'',
@@ -257,7 +258,7 @@
                 stustatus:'',                             
                 tableData: [],
                 classid: 0,
-                search: '',
+                search: null,
                 currentPage: 0,
                 count:0,
                 options: [],
@@ -281,12 +282,15 @@
                     classname: '',
                     info: '',      
                     place:'',
-                    time:0,
-                    count:0,
+                    classtime:'',
+                    classcount:'',
                     tname:'',             
                     weekday:'',
                     total:'',
+                    teacher:'',
+                    cascad:[],
                 },
+
                 // 验证规则
                 rulesAddUser: {
                     classname: [
@@ -300,14 +304,14 @@
                     { required: true, message: '请输入地点', trigger: 'blur' },
                     { trigger: 'blur' }                                        
                     ],
-                    // time: [
-                    // { required: false, message: '请输入上课时间', trigger: 'blur' },
-                    // { trigger: 'blur' }                                        
-                    // ],
-                    // count: [
-                    // { required: false, message: '请输入节数', trigger: 'blur' },
-                    // { trigger: 'blur' }                                        
-                    // ],
+                    classtime: [
+                    { required: true, message: '请输入上课时间', trigger: 'blur' },
+                    { trigger: 'blur' }                                        
+                    ],
+                    classcount: [
+                    { required: true, message: '请输入节数', trigger: 'blur' },
+                    { trigger: 'blur' }                                        
+                    ],
                     tname: [
                     { required: true, message: '请输入教师', trigger: 'blur' },
                     { trigger: 'blur' }                                        
@@ -393,7 +397,8 @@
                 this.searchcourse = value[1]
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('major',value[0])	
-                params.append('course',value[1])			
+                params.append('course',value[1])	
+                params.append('search',this.search)	
                 let req = {
                     type:"get",
                     url:'classList/',
@@ -408,6 +413,8 @@
                         type: 'success',
                         message: "获取班级列表信息"
                     });
+                    this.addclaTableVisible = false  // 关闭弹框
+                    this.resetFields()
                     }else{
                         this.$message({
                             type: 'error',
@@ -433,6 +440,7 @@
                 {
                     params.append('course',this.searchcourse)
                 }                               				
+                params.append('search',this.search)
                 let req = {
                     type:"get",
                     url:'classList/',
@@ -447,6 +455,8 @@
                         type: 'success',
                         message: "获取班级列表信息"
                     });
+                    this.addclaTableVisible = false  // 关闭弹框
+                    this.resetFields()
                     }else{
                         this.$message({
                             type: 'error',
@@ -468,8 +478,8 @@
                 this.classid = val.classid           
                 this.courseid = val.course 
                 this.addClass.place = val.place
-                this.addClass.time = val.time
-                this.addClass.count = val.count
+                this.addClass.classtime = String(val.time)
+                this.addClass.classcount = String(val.count)
                 this.addClass.tname = val.tname
                 this.addClass.weekday = val.weekday
                 this.addClass.total = val.total
@@ -488,6 +498,7 @@
                     params.append('course',this.courseid)	
                     params.append('major',this.majorid)	
                 }
+                params.append('search',this.search)
                 let req = {
                     type:"get",
                     url:'classList/',
@@ -502,6 +513,8 @@
                         type: 'success',
                         message: "获取班级列表信息"
                     });
+                    this.addclaTableVisible = false  // 关闭弹框
+                    this.resetFields()
                     }else{
                         this.$message({
                             type: 'error',
@@ -538,6 +551,14 @@
             addDialogClose() {
                 this.resetFields()
             },
+            //消息弹窗
+            open(val) {
+                this.$alert(val, {
+                confirmButtonText: '确定',
+                callback: action => {                    
+                }
+                });
+            },    
             // 点击添加班级
             onAddClass() {
             this.$refs.addFormRef.validate(async valid => {
@@ -546,12 +567,24 @@
 				params.append('name',this.addClass.classname)			
 				params.append('info',this.addClass.info)		
 				params.append('place',this.addClass.place)		
-				params.append('time',this.addClass.time)		
-				params.append('count',this.addClass.count)		
+				params.append('time',this.addClass.classtime)		
+				params.append('count',this.addClass.classcount)		
                 params.append('course',this.courseid)		
-                params.append('teacherid',this.value)	
+                params.append('teacherid',this.addClass.teacher)	
                 params.append('total',this.addClass.total)	
-                params.append('weekday',this.addClass.weekday)	                
+                params.append('weekday',this.addClass.weekday)	   
+                if(!this.courseid)
+                {
+                    this.open('请选择课程！！')
+                    return null;
+                }      
+                if(!this.addClass.teacher)
+                {
+                    this.open('请选择任课教师！！')
+                    return null;
+                }
+                    
+                console.log(this.addClass.teacher)                           
                 let req = {
                     type:"post",
                     url:'classList/addclass/',
@@ -564,6 +597,8 @@
                         type: 'success',
                         message: r.result
                     });
+                    this.addclaTableVisible = false  // 关闭弹框
+                    this.resetFields()
                     }else{
                         this.$message({
                             type: 'error',
@@ -571,8 +606,7 @@
                         });
                     }
                 })                
-                this.addclaTableVisible = false  // 关闭弹框
-                this.resetFields()
+
             })
          },
          //修改班级
@@ -584,8 +618,8 @@
 				params.append('name',this.addClass.classname)		
                 params.append('info',this.addClass.info)	
                 params.append('place',this.addClass.place)		
-				params.append('time',this.addClass.time)		
-				params.append('count',this.addClass.count)	
+				params.append('time',this.addClass.classtime)		
+				params.append('count',this.addClass.classcount)	
 				params.append('course',this.courseid)		
                 params.append('classid',this.classid)
                 params.append('total',this.addClass.total)	
@@ -603,6 +637,8 @@
                         type: 'success',
                         message: r.result
                     });
+                    this.editclaTableVisible = false  // 关闭弹框
+                    this.resetFields()  
                     }else{
                         this.$message({
                             type: 'error',
@@ -610,8 +646,7 @@
                         });
                     }
                 })
-                this.editclaTableVisible = false  // 关闭弹框
-                this.resetFields()
+
             })
          },
          //修改班级状态
@@ -643,6 +678,8 @@
                         type: 'success',
                         message: r.result
                     });
+                    this.statusTableVisible = false  // 关闭弹框                
+                    this.getClassList() // 重新调用，刷新表单
                     }else{
                         this.$message({
                             type: 'error',
@@ -650,8 +687,7 @@
                         });
                     }
                 })
-                this.statusTableVisible = false  // 关闭弹框                
-                this.getClassList() // 重新调用，刷新表单
+
          },
          //点击取消的时候清理表格
          clearform(){
@@ -666,23 +702,32 @@
          },        
          //重置表格
          resetFields(){
+             this.search = null            
+             this.cascade = []
+             this.cascad = []
              this.addClass.classname = null
              this.addClass.info = null
              this.addClass.password = null
              this.addClass.file = null
              this.addClass.email = null
              this.addClass.place = null
-             this.addClass.count = null
-             this.addClass.time = null
+             this.addClass.classcount = null
+             this.addClass.classtime = null
              this.defaultmajor = []
              this.addClass.tname = null
              this.addClass.weekday = null
              this.addClass.total = null
+             this.addClass.teacher = null
+             this.addClass.cascad = []
+            this.searchmajor = null
+            this.searchcourse = null
+            this.value = null	  
          },
          //处理添加班级的选择专业和年级
          handleaddusermg(value){           
             this.major = value[0]
             this.courseid = value[1]
+            this.cascad = value[1]
          },
          //处理上传图片
          uploadFile(param) {                

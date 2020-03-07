@@ -263,7 +263,7 @@
                 stustatus:'',                             
                 tableData: [],
                 sid: 0,
-                search: '',
+                search: null,
                 currentPage: 0,
                 count:0,
                 options: [],
@@ -617,6 +617,7 @@
          },        
          //重置表格
          resetFields(){
+             this.search = null
              this.$refs.addFormRef.resetFields() // 清空表单
              this.addUser.username = null
              this.addUser.account = null

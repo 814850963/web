@@ -369,6 +369,9 @@
                         type: 'success',
                         message: r.result
                     });
+                    this.addstuTableVisible = false  // 关闭弹框
+                    this.resetFields()
+                    this.getCourseList() // 重新调用，刷新表单
                     }else{
                         this.$message({
                             type: 'error',
@@ -376,9 +379,7 @@
                         });
                     }
                 })
-                this.addstuTableVisible = false  // 关闭弹框
-                this.resetFields()
-                this.getCourseList() // 重新调用，刷新表单
+
             })
          },
          //修改课程
@@ -402,6 +403,9 @@
                         type: 'success',
                         message: r.result
                     });
+                    this.editstuTableVisible = false  // 关闭弹框
+                    this.resetFields()
+                    this.getCourseList() // 重新调用，刷新表单
                     }else{
                         this.$message({
                             type: 'error',
@@ -409,9 +413,7 @@
                         });
                     }
                 })
-                this.editstuTableVisible = false  // 关闭弹框
-                this.resetFields()
-                this.getCourseList() // 重新调用，刷新表单
+
             })
          },
          //修改课程状态
@@ -446,6 +448,8 @@
                         type: 'success',
                         message: r.result
                     });
+                    this.statusTableVisible = false  // 关闭弹框                
+                    this.getCourseList() // 重新调用，刷新表单
                     }else{
                         this.$message({
                             type: 'error',
@@ -453,8 +457,7 @@
                         });
                     }
                 })
-                this.statusTableVisible = false  // 关闭弹框                
-                this.getCourseList() // 重新调用，刷新表单
+
          },
          //点击取消的时候清理表格
          clearform(){
@@ -476,6 +479,7 @@
              this.addCourse.file = null
              this.addCourse.email = null
              this.defaultmajor = []
+             this.search = null
          },
          //处理添加课程的选择专业和年级
          handleaddusermg(value){           

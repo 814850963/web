@@ -3,7 +3,7 @@
         <head-top></head-top>
 		 <div class="table_container">
             <!-- 关键字搜索 -->
-           <el-input style="width:180px" name="search" v-model="search" placeholder="输入要搜索专业的信息"></el-input>
+           <el-input style="width:180px" name="search"  @keyup.enter.native="getCourseList"  v-model="search" placeholder="输入要搜索专业的信息"></el-input>
             <!-- 添加专业 -->
             <el-button type="primary" @click="openaddmajor()">添加专业</el-button>
             <!-- 添加专业弹框 -->
@@ -80,7 +80,7 @@
             </el-dialog>                    
             <!-- 专业信息表格 -->
            <el-table
-                :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+                :data="tableData"
                 style="width: 100%">
                 <!-- 专业姓名 -->
                 <el-table-column
@@ -194,6 +194,7 @@
                 this.currentPage = val;
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
 				params.append('page',val)				
+				params.append('search',this.search)				
                 let req = {
                     type:"get",
                     url:'majorList/',
@@ -230,7 +231,8 @@
             //获取专业列表
             getCourseList(){			
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
-				params.append('page',1)				
+				params.append('page',1)			
+				params.append('search',this.search)				
                 let req = {
                     type:"get",
                     url:'majorList/',

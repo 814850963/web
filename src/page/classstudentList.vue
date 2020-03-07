@@ -6,7 +6,7 @@
         </div>
         <div class="table_container">      
             <!-- 关键字搜索 -->
-           <el-input style="width:180px" name="search" v-model="search" placeholder="输入要搜索学生的信息"></el-input>    
+           <el-input style="width:180px" name="search" @keyup.enter.native="getStudentList"  v-model="search" placeholder="输入要搜索学生的信息"></el-input>    
             <!-- 添加学生 -->
             <el-button type="primary" @click="openadduser()">添加学生</el-button>
             <!-- 添加用户弹框 -->
@@ -263,6 +263,7 @@
                 this.currentPage = val;
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('page',val)	
+                params.append('search',this.search)
                 if(this.classid!=null)
                 {                    
                     params.append('classid',this.classid)			    
@@ -297,6 +298,7 @@
             getStudentList(classid){			
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('page',1)	
+                params.append('search',this.search)
                 if(this.classid!=null)
                 {                    
                     params.append('classid',this.classid)			    

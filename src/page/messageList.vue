@@ -3,7 +3,7 @@
         <head-top></head-top>
 		 <div class="table_container">
             <!-- 关键字搜索 -->
-           <el-input style="width:180px" name="search" v-model="search" placeholder="输入要搜索班级的信息"></el-input>
+           <el-input style="width:180px" name="search" @keyup.enter.native="getMessage" v-model="search" placeholder="输入要搜索班级的信息"></el-input>
         
             <!-- 按照状态检索 -->
             <el-cascader   
@@ -30,7 +30,7 @@
             </el-dialog>                   
             <!-- 班级信息表格 -->
            <el-table
-                :data="tableData.filter(data => !search || data.name.toLowerCase().includes(search.toLowerCase()))"
+                :data="tableData"
                 style="width: 100%">
                 <!-- 主题 -->
                 <el-table-column
@@ -58,6 +58,8 @@
                 >
                 <template slot-scope="scope">
                     <el-button split-button type="primary" @click="handleEdit( scope.row)">查看</el-button>
+                    <el-button  v-if="scope.row.status===1" split-button  type="danger" @click="changestatus(0,scope.row)">禁用</el-button>
+                    <el-button  v-if="scope.row.status===0" split-button  type="success" @click="changestatus(1,scope.row)">启用</el-button>
                 </template>
                 </el-table-column>
             </el-table>
@@ -156,7 +158,8 @@
             //获取所有消息
             getAllMessage(){
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
-                params.append('page',1)	                
+                params.append('page',1)	   
+                params.append('search',this.search)	
                 this.classid==null
                 let req = {
                     type:"get",
@@ -188,6 +191,7 @@
                 params.append('page',this.currentPage)	                
                 if(this.classid!=null&&this.classid!='')
                     params.append('classid',this.classid)	
+                params.append('search',this.search)	
                 let req = {
                     type:"get",
                     url:'infoManage/getMessage/',
@@ -282,6 +286,21 @@
                             message: "获取专业信息失败"
                         });
                     }
+                })	
+            },
+            //修改通知状态
+            changestatus(val,value){
+                const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。				
+                params.append('status',val)	
+                params.append('infoid',value.infoid)	                
+                let req = {
+                    type:"post",
+                    url:'infoManage/changeMessagestatus/',
+                    //post请求写data get请求写params
+                    data:params
+                }
+                this.getFN(req).then(r=>{                    
+                    this.getMessage()
                 })	
             },
              // 关闭弹框的回调
