@@ -64,7 +64,7 @@
             <!-- 编辑用户弹框 -->
             <el-dialog
             style="width:1050px; margin-left:20%;"            
-            title="编辑用户"
+            title="编辑教师"
             @close="addDialogClose"
             :visible.sync="editstuTableVisible"
             :close-on-click-modal="false"
@@ -468,6 +468,11 @@
             this.$refs.addFormRef.validate(async valid => {
                 if (!valid) return null  // 如果验证失败就不往下继续执行
                 const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
+                if(this.major==null||this.major=="")
+                {
+                    this.open4()
+                    return null
+                }
 				params.append('name',this.addUser.username)		
 				params.append('password',this.addUser.password)		
 				params.append('account',this.addUser.account)		
@@ -489,8 +494,8 @@
                     });
                     this.addstuTableVisible = false  // 关闭弹框
                     //this.$refs.addFormRef.resetFields() // 清空表单
-                    this.resetFields()
                     this.getTeacherList() // 重新调用，刷新表单
+                    this.resetFields()
                     }else{
                         this.$message({
                             type: 'error',
@@ -528,8 +533,8 @@
                     });
                     this.editstuTableVisible = false  // 关闭弹框
                     //this.$refs.addFormRef.resetFields() // 清空表单
-                    this.resetFields()
                     this.getTeacherList() // 重新调用，刷新表单
+                    this.resetFields()
                     }else{
                         this.$message({
                             type: 'error',
@@ -646,7 +651,13 @@
 		//获取老师所带班级信息
 		classinfo(){
 
-		},
+        },
+         open4() {
+        this.$notify.error({
+          title: '错误',
+          message: '没有选择专业'
+        });
+         }
         },
     }
 </script>

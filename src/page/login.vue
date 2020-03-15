@@ -21,6 +21,7 @@
 				<p class="tip">由东软YHT提供技术支持</p>
 	  		</section>
 	  	</transition>
+		  <a href="http://www.beian.miit.gov.cn">辽ICP备19001526号</a>
   	</div>
 </template>
 

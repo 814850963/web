@@ -34,7 +34,8 @@
                     <el-cascader   
                         :options="options"
                         @change="handleaddusermg"                       
-                        placeholder="请选择专业">
+                        placeholder="请选择专业"
+                        v-model="addCourse.major">
                     </el-cascader>
                 </el-form-item>
                 <el-form-item>
@@ -59,7 +60,7 @@
                 <el-form-item prop="info" label="课程简介">
                     <el-input v-model="addCourse.info"></el-input>
                 </el-form-item>
-                 <el-form-item prop="major" label="专业">
+                 <el-form-item  label="专业">
                     <!-- 按照状态检索 -->
                     <el-cascader   
                         :options="options"
@@ -184,7 +185,8 @@
                 // 添加课程
                 addCourse: {
                     coursename: '',
-                    info: '',                   
+                    info: '',     
+                    major:'',              
                 },
                 // 验证规则
                 rulesAddUser: {
@@ -287,7 +289,7 @@
                 if(!flag)       
                 this.editstuTableVisible = true
                 this.courseid = val.courseid
-                this.defaultmajor.push(val.major)
+                this.defaultmajor.push(val.major)                
                 this.major = val.major                
             },
             handleDelete(index, row) {
@@ -354,9 +356,15 @@
             this.$refs.addFormRef.validate(async valid => {
                 if (!valid) return null  // 如果验证失败就不往下继续执行
                 const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
+                if(this.major==null||this.major=="")
+                {
+                    this.open4()
+                    return null
+                }
 				params.append('name',this.addCourse.coursename)			
 				params.append('info',this.addCourse.info)		
-				params.append('major',this.major)			
+                params.append('major',this.major)	
+                console.log(this.major)		
                 let req = {
                     type:"post",
                     url:'courseList/addcourse/',
@@ -369,9 +377,8 @@
                         type: 'success',
                         message: r.result
                     });
-                    this.addstuTableVisible = false  // 关闭弹框
-                    this.resetFields()
-                    this.getCourseList() // 重新调用，刷新表单
+                    this.addstuTableVisible = false  // 关闭弹框                     
+                    this.clearform()                    
                     }else{
                         this.$message({
                             type: 'error',
@@ -404,8 +411,8 @@
                         message: r.result
                     });
                     this.editstuTableVisible = false  // 关闭弹框
-                    this.resetFields()
                     this.getCourseList() // 重新调用，刷新表单
+                    this.clearform()
                     }else{
                         this.$message({
                             type: 'error',
@@ -477,12 +484,13 @@
              this.addCourse.info = null
              this.addCourse.password = null
              this.addCourse.file = null
+             this.addCourse.major = null
              this.addCourse.email = null
              this.defaultmajor = []
              this.search = null
          },
          //处理添加课程的选择专业和年级
-         handleaddusermg(value){           
+         handleaddusermg(value){                
             this.major = value[0]
             this.grade = value[1]
          },
@@ -517,6 +525,12 @@
             }
             this.statusTableVisible = true      
         },
+         open4() {
+        this.$notify.error({
+          title: '错误',
+          message: '没有选择专业'
+        });
+      }
 		}
     }
 </script>
