@@ -91,7 +91,7 @@
                          v-model="defaultmajor">
                     </el-cascader>
                 </el-form-item>
-                <el-form-item prop="pic" label="请选择头像">
+                <el-form-item label="请选择头像">
                     <el-upload
                             action=""
                             class="upload-demo"
@@ -333,6 +333,7 @@
             else
             {
                 this.searchmajor = value[0]
+                
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('major',value[0])		
                 params.append('search',this.search)					
@@ -468,7 +469,7 @@
             this.$refs.addFormRef.validate(async valid => {
                 if (!valid) return null  // 如果验证失败就不往下继续执行
                 const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
-                if(this.major==null||this.major=="")
+                if(this.major==null||this.major==""||this.major==0)
                 {
                     this.open4()
                     return null
@@ -511,6 +512,11 @@
                 this.$refs.addFormRef.validate(async valid => {
                 if (!valid) return null  // 如果验证失败就不往下继续执行
                 const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
+                if(this.major==null||this.major==""||this.major==0)
+                {
+                    this.open4()
+                    return null
+                }
 				params.append('name',this.addUser.username)		
 				params.append('password',this.addUser.password)		
 				params.append('account',this.addUser.account)		
@@ -593,13 +599,13 @@
          clearform(){
             this.editstuTableVisible = false
             this.infostuTableVisible = false
-            this.addstuTableVisible = false
+            this.addstuTableVisible = false            
             this.resetFields()
          },
          //处理添加用户点击事件
          openadduser(){
             this.addstuTableVisible = true
-            //this.$refs.addFormRef.resetFields() // 清空表单
+            this.$refs.addFormRef.resetFields() // 清空表单
             this.resetFields()
          },        
          //重置表格

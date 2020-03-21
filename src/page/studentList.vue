@@ -91,7 +91,7 @@
                          v-model="defaultmajor">
                     </el-cascader>
                 </el-form-item>
-                <el-form-item prop="pic" label="请选择学生头像">
+                <el-form-item  label="请选择学生头像">
                     <el-upload
                             action=""
                             class="upload-demo"
@@ -340,15 +340,17 @@
             handleChange(value) {
             if(value[0]==0)
             {
-                this.getStudentList();
                 this.searchmajor = null
                 this.searchgrade = null
+                this.getStudentList();
             }
                 
             else
             {
                 this.searchmajor = value[0]
                 this.searchgrade = value[1]
+                console.log(this.searchmajor)
+                console.log(this.searchgrade)
                 this.getStudentList();  
             }           
             },
@@ -478,11 +480,17 @@
             },
              // 关闭弹框的回调
             addDialogClose() {
-            this.$refs.addFormRef.resetFields() // 清空表单
+                   this.resetFields()
+            //this.$refs.addFormRef.resetFields() // 清空表单
             },
             // 点击添加用户
             onAddUser() {
-            this.$refs.addFormRef.validate(async valid => {
+            this.$refs.addFormRef.validate(async valid => {                
+                if(this.major==null||this.major==0)
+                {
+                    this.open4();
+                    return;
+                }
                 if (!valid) return null  // 如果验证失败就不往下继续执行
                 const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
 				params.append('name',this.addUser.username)		
@@ -505,8 +513,7 @@
                         type: 'success',
                         message: r.result
                     });
-                    this.addstuTableVisible = false  // 关闭弹框
-                    this.$refs.addFormRef.resetFields() // 清空表单
+                    this.addstuTableVisible = false  // 关闭弹框                    
                     this.resetFields()
                     this.getStudentList() // 重新调用，刷新表单
                     }else{
@@ -521,7 +528,12 @@
          },
          //修改用户
          onChangeUser(){        
-                this.$refs.addFormRef.validate(async valid => {                
+                this.$refs.addFormRef.validate(async valid => {                            
+                if(this.major==null||this.major==0)
+                {
+                    this.open4();
+                    return;
+                }       
                 if (!valid) return null  // 如果验证失败就不往下继续执行
                 const params=new FormData()//接口定义了一些实用的方法来处理 URL 的查询字符串。
 				params.append('name',this.addUser.username)		
@@ -545,8 +557,7 @@
                         type: 'success',
                         message: r.result
                     });
-                    this.editstuTableVisible = false  // 关闭弹框
-                    this.$refs.addFormRef.resetFields() // 清空表单
+                    this.editstuTableVisible = false  // 关闭弹框                    
                     this.resetFields()
                     this.getStudentList() // 重新调用，刷新表单
                     }else{
@@ -611,14 +622,14 @@
          },
          //处理添加用户点击事件
          openadduser(){
-            this.addstuTableVisible = true
-            this.$refs.addFormRef.resetFields() // 清空表单
+            this.addstuTableVisible = true            
             this.resetFields()
          },        
          //重置表格
          resetFields(){
+             this.major = null
              this.search = null
-             this.$refs.addFormRef.resetFields() // 清空表单
+             //this.$refs.addFormRef.resetFields() // 清空表单
              this.addUser.username = null
              this.addUser.account = null
              this.addUser.password = null
@@ -661,6 +672,12 @@
             }
             this.statusTableVisible = true      
         },
+        open4() {
+        this.$notify.error({
+          title: '错误',
+          message: '没有选择专业'
+        });
+      }
         },
     }
 </script>
