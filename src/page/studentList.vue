@@ -39,7 +39,8 @@
                     <!-- 按照状态检索 -->
                     <el-cascader   
                         :options="options"
-                        @change="handleaddusermg"                       
+                        @change="handleaddusermg"   
+                        v-model="defaultmajor"                   
                         placeholder="请选择专业">
                     </el-cascader>
                 </el-form-item>
@@ -343,14 +344,11 @@
                 this.searchmajor = null
                 this.searchgrade = null
                 this.getStudentList();
-            }
-                
+            }                
             else
             {
                 this.searchmajor = value[0]
                 this.searchgrade = value[1]
-                console.log(this.searchmajor)
-                console.log(this.searchgrade)
                 this.getStudentList();  
             }           
             },
@@ -441,17 +439,17 @@
                 this.getFN(req).then(r=>{
                     this.tableData = r.data;                           
                     this.count = r.len;                    
-                    if (r.status == 1) {
-                    this.$message({
-                        type: 'success',
-                        message: "获取学生列表信息"
-                    });
-                    }else{
-                        this.$message({
-                            type: 'error',
-                            message: "获取学生列表信息失败"
-                        });
-                    }
+                    // if (r.status == 1) {
+                    // this.$message({
+                    //     type: 'success',
+                    //     message: "获取学生列表信息"
+                    // });
+                    // }else{
+                    //     this.$message({
+                    //         type: 'error',
+                    //         message: "获取学生列表信息失败"
+                    //     });
+                    // }
                 })		
             },
             //获取所有专业详情
@@ -462,8 +460,7 @@
                     //post请求写data get请求写params
                     //  params:params
                 }
-                this.getFN(req).then(r=>{               
-                    console.log(r)     
+                this.getFN(req).then(r=>{                                   
                     this.options = r;
                     if (r != null) {
                     this.$message({
@@ -485,7 +482,7 @@
             },
             // 点击添加用户
             onAddUser() {
-            this.$refs.addFormRef.validate(async valid => {                
+            this.$refs.addFormRef.validate(async valid => {                    
                 if(this.major==null||this.major==0)
                 {
                     this.open4();
@@ -626,7 +623,7 @@
             this.resetFields()
          },        
          //重置表格
-         resetFields(){
+         resetFields(){             
              this.major = null
              this.search = null
              //this.$refs.addFormRef.resetFields() // 清空表单

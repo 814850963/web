@@ -10,6 +10,7 @@
                 :options="options"
                 :value="cascade"
                 @change="handleChange"
+                 v-model="defaultmajor"
                 placeholder="请选择专业和班级">
             </el-cascader>
             <!-- 添加班级 -->
@@ -275,8 +276,9 @@
                 statusTableVisible:false,
                 //添加班级时的专业年级
                 courseid:'',
-                major:'',
-                course:'',
+                major:null,
+                course:null,
+                course1:null,
                 // 添加班级
                 addClass: {
                     classname: '',
@@ -331,11 +333,12 @@
     		headTop,
             // visitorPie,
         },
-        activated() {
+        activated() {            
             //获取路由传参
-            this.courseid = this.$route.query.courseid
-            this.major = this.$route.query.majorid
-			this.getClassList(this.courseid,this.major);            
+            this.courseid1 = this.$route.query.courseid
+            this.major = this.$route.query.majorid            
+            this.getClassList();            
+            console.log("activated")
         },
     	mounted(){
             if(!sessionStorage.getItem("authen"))
@@ -385,6 +388,7 @@
             },
             //处理按照专业检索的请求
             handleChange(value) {
+                console.log("handleChange")
             if(value[0]==0)
             {
                 this.getClassList(); 
@@ -429,6 +433,7 @@
             },
             //当页面发生改变时
             handleCurrentChange(val) {
+                  console.log("handleCurrentChange")
                 this.currentPage = val;
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('page',val)	
@@ -436,10 +441,16 @@
                 {
                     params.append('major',this.searchmajor)	
                 }
+                else{                    
+                    params.append('major',this.major)	
+                }
                 if(this.searchcourse!=null&&this.searchcourse!='')
                 {
                     params.append('course',this.searchcourse)
-                }                               				
+                }   
+                else{
+                    params.append('course',this.courseid1)
+                }                            				
                 params.append('search',this.search)
                 let req = {
                     type:"get",
@@ -466,17 +477,17 @@
                 })		
             },
             //处理编辑的按钮
-             handleEdit(val,flag) {        
+             handleEdit(val,flag) {                      
                 this.addClass.classname = val.name
                 this.addClass.info = val.info   
                 if(!flag)       
-                this.editclaTableVisible = true
-                this.courseid = val.courseid
+                this.editclaTableVisible = true                
                 this.defaultmajor.push(val.major)
                 this.major = val.major    
                 this.defaultmajor.push(val.course)
                 this.classid = val.classid           
                 this.courseid = val.course 
+                this.course = val.course 
                 this.addClass.place = val.place
                 this.addClass.classtime = String(val.time)
                 this.addClass.classcount = String(val.count)
@@ -488,15 +499,13 @@
                 console.log(index, row);
             },
             //获取班级列表
-            getClassList(courseid,majorid){			
+            getClassList(){		                                
                 const params=new URLSearchParams()//接口定义了一些实用的方法来处理 URL 的查询字符串。
                 params.append('page',1)	
-                if(courseid!=null&&majorid!=null)
+                if(this.courseid1!=null&&this.major!=null)
                 {
-                    this.courseid=courseid
-                    this.majorid = majorid
-                    params.append('course',this.courseid)	
-                    params.append('major',this.majorid)	
+                    params.append('course',this.courseid1)	
+                    params.append('major',this.major)	
                 }
                 params.append('search',this.search)
                 let req = {
@@ -508,19 +517,6 @@
                 this.getFN(req).then(r=>{
                     this.tableData = r.data;                           
                     this.count = r.len;
-                    if (r.status == 1) {
-                    this.$message({
-                        type: 'success',
-                        message: "获取班级列表信息"
-                    });
-                    this.addclaTableVisible = false  // 关闭弹框
-                    this.resetFields()
-                    }else{
-                        this.$message({
-                            type: 'error',
-                            message: "获取班级列表信息失败"
-                        });
-                    }
                 })		
             },
             //获取所有专业详情
@@ -583,8 +579,7 @@
                     this.open('请选择任课教师！！')
                     return null;
                 }
-                    
-                console.log(this.addClass.teacher)                           
+                                                     
                 let req = {
                     type:"post",
                     url:'classList/addclass/',
@@ -623,8 +618,7 @@
 				params.append('course',this.courseid)		
                 params.append('classid',this.classid)
                 params.append('total',this.addClass.total)	
-                params.append('weekday',this.addClass.weekday)		
-                console.log(this.addClass.total,this.addClass.weekday)
+                params.append('weekday',this.addClass.weekday)		                
                 let req = {
                     type:"post",
                     url:'classList/changeclass/',
@@ -637,8 +631,9 @@
                         type: 'success',
                         message: r.result
                     });
-                    this.editclaTableVisible = false  // 关闭弹框
                     this.resetFields()  
+                    this.getClassList()
+                    this.editclaTableVisible = false  // 关闭弹框                    
                     }else{
                         this.$message({
                             type: 'error',

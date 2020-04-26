@@ -221,7 +221,7 @@
                     <el-dropdown-menu slot="dropdown">
                         <el-dropdown-item  @click.native="showinfo(scope.row)">查看详情</el-dropdown-item>                        
                         <el-dropdown-item  @click.native="editstatus( scope.row)">修改状态</el-dropdown-item>        
-						<el-dropdown-item  @click.native="classinfo( scope.row)">查看班级</el-dropdown-item>                    
+						<!-- <el-dropdown-item  @click.native="classinfo( scope.row)">查看班级</el-dropdown-item>                     -->
                     </el-dropdown-menu>
                     </el-dropdown>
                 </template>
@@ -422,17 +422,6 @@
                 this.getFN(req).then(r=>{
                     this.tableData = r.data;                           
                     this.count = r.len;
-                    if (r.status == 1) {
-                    this.$message({
-                        type: 'success',
-                        message: "获取教师列表信息"
-                    });
-                    }else{
-                        this.$message({
-                            type: 'error',
-                            message: "获取教师列表信息失败"
-                        });
-                    }
                 })		
             },
             //获取所有专业详情
@@ -604,13 +593,11 @@
          },
          //处理添加用户点击事件
          openadduser(){
-            this.addstuTableVisible = true
-            this.$refs.addFormRef.resetFields() // 清空表单
+            this.addstuTableVisible = true            
             this.resetFields()
          },        
          //重置表格
-         resetFields(){
-             this.$refs.addFormRef.resetFields() // 清空表单
+         resetFields(){             
              this.addUser.username = null
              this.addUser.account = null
              this.addUser.password = null
