@@ -3,7 +3,8 @@
         <head-top></head-top>
 		<section class="data_section">
 			<header class="section_title">欢迎使用本系统</header>
-			<el-row :gutter="20"  style="margin-bottom: 10px;">
+            <!-- <el-main>
+            <el-row :gutter="20"  style="margin-bottom: 10px;">
                 <el-col :span="4"><div class="data_list today_head"><span class="data_num head">当日考勤数据：</span></div></el-col>
 				<el-col :span="4"><div class="data_list"><span class="data_num">{{checkpeople}}</span> 考勤人数：</div></el-col>
 				<el-col :span="4"><div class="data_list"><span class="data_num">{{uncheckpeople}}</span> 未考勤人数：</div></el-col>
@@ -15,6 +16,7 @@
 				<el-col :span="4"><div class="data_list"><span class="data_num">{{intro}}</span> 详情：</div></el-col>
                 <el-col :span="4"><div class="data_list"><span class="data_num"></span> 获取天气状态： <el-tag v-if="weatherstatus==false" type="primary">已关闭</el-tag> <el-tag  v-if="weatherstatus==true" type="danger">已开启</el-tag></div></el-col><el-switch @change="changeWeather()" v-model="weatherstatus"  active-color="#13ce66" inactive-color="#ff4949"></el-switch>
 			</el-row>
+            </el-main> -->
 		</section>
 		
     </div>
